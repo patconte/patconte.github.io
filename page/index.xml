@@ -1,23 +1,23 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pages on Patrick Contes blog</title><link>https://powershellpat.github.io/page/</link><description>Recent content in Pages on Patrick Contes blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 06 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://powershellpat.github.io/page/index.xml" rel="self" type="application/rss+xml"/><item><title>Archives</title><link>https://powershellpat.github.io/archives/</link><pubDate>Sun, 06 Mar 2022 00:00:00 +0000</pubDate><guid>https://powershellpat.github.io/archives/</guid><description/></item><item><title>About</title><link>https://powershellpat.github.io/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://powershellpat.github.io/about/</guid><description>&lt;!-- markdownlint-disable-next-line -->
-&lt;img src="image.jpg" alt="alt text" width="350" height="300">
-&lt;h2 id="intro">Intro
-&lt;/h2>&lt;p>Hey, I&amp;rsquo;m Patrick. I&amp;rsquo;m a technology professional specialising in cloud infrastructure engineering and consulting. With over 15 years of experience, I&amp;rsquo;ve seen and experienced the significant shift from on-prem to public cloud and now the introduction of AI into basically everything.&lt;/p>
-&lt;p>What I share here is mostly content that I think would be insightful and assist those who would like to know more about something which I have expertise in.&lt;/p>
-&lt;h2 id="what-are-you-passionate-about">What are you passionate about?
-&lt;/h2>&lt;p>Technology, its capabilities and sharing my thoughts/ideas. I love being able to have lengthy conversations about my experiences, learning about advancements, teaching others and sharing ideas.
-Tech is my forte. It&amp;rsquo;s something that has been with me ever since I was a young boy growing up in the 90s when the internet was something you accessed via a dial-up modem and got a 56k connection. Yes, queue that infamous dial-up modem sound 🔉&lt;/p>
-&lt;h2 id="what-am-i-going-to-see-here">What am I going to see here?
-&lt;/h2>&lt;p>I really just want to carve out a space that allows me to interact with a wider audience for the purposes of:&lt;/p>
-&lt;ul>
-&lt;li>Education&lt;/li>
-&lt;li>Ideas sharing&lt;/li>
-&lt;li>Knowledge transfer&lt;/li>
-&lt;li>Upskilling&lt;/li>
-&lt;/ul>
-&lt;p>Having experienced IT and tech the way that I did, I was able to get a look at what it was like when we ran most of our server environments in an on-premise setting. Now that cloud is much more prevalent, those on-premise experiences translate to how we do it in the cloud, even though those fundamental technologies still exist under the hood. Whilst they are obstructed, they are still important to learn and understand.
-This may end up being a two-way street. I&amp;rsquo;d love to learn more from you as well if we share a common interest!&lt;/p>
-&lt;h2 id="where-are-you-working">Where are you working?
-&lt;/h2>&lt;p>I currently work for a consultancy called &lt;a class="link" href="https://mantelgroup.com.au/" target="_blank" rel="noopener"
->Mantel Group&lt;/a> who specialise in cloud, data, digital and cyber security. My tenure here has been 4 years and counting. As an employer, they see me as more than a number and it&amp;rsquo;s refreshing from the ratrace of other establishments (who will remain nameless). I&amp;rsquo;m a Lead Consultant who works in the AWS Engineering space, specialising in migrations.&lt;/p>
-&lt;h2 id="how-can-i-contact-you">How can I contact you?
-&lt;/h2>&lt;p>Feel free to hit me up on &lt;a class="link" href="linkedin.com/in/%f0%9f%9b%9c-patrick-conte-0a85312a" >LinkedIn&lt;/a>&lt;/p></description></item><item><title>Links</title><link>https://powershellpat.github.io/links/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://powershellpat.github.io/links/</guid><description/></item><item><title>Search</title><link>https://powershellpat.github.io/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://powershellpat.github.io/search/</guid><description/></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Pages on Patrick Contes blog</title><link>https://powershellpat.github.io/page/</link><description>Recent content in Pages on Patrick Contes blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 06 Mar 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://powershellpat.github.io/page/index.xml" rel="self" type="application/rss+xml"/><item><title>Archives</title><link>https://powershellpat.github.io/archives/</link><pubDate>Sun, 06 Mar 2022 00:00:00 +0000</pubDate><guid>https://powershellpat.github.io/archives/</guid><description/></item><item><title>About</title><link>https://powershellpat.github.io/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://powershellpat.github.io/about/</guid><description>&lt;!-- markdownlint-disable-next-line --&gt;
+&lt;img src="image.jpg" alt="alt text" width="350" height="300"&gt;
+&lt;h2 id="intro"&gt;Intro
+&lt;/h2&gt;&lt;p&gt;Hey, I&amp;rsquo;m Patrick. I&amp;rsquo;m a technology professional specialising in cloud infrastructure engineering and consulting. With over 15 years of experience, I&amp;rsquo;ve seen and experienced the significant shift from on-prem to public cloud and now the introduction of AI into basically everything.&lt;/p&gt;
+&lt;p&gt;What I share here is mostly content that I think would be insightful and assist those who would like to know more about something which I have expertise in.&lt;/p&gt;
+&lt;h2 id="what-are-you-passionate-about"&gt;What are you passionate about?
+&lt;/h2&gt;&lt;p&gt;Technology, its capabilities and sharing my thoughts/ideas. I love being able to have lengthy conversations about my experiences, learning about advancements, teaching others and sharing ideas.
+Tech is my forte. It&amp;rsquo;s something that has been with me ever since I was a young boy growing up in the 90s when the internet was something you accessed via a dial-up modem and got a 56k connection. Yes, queue that infamous dial-up modem sound 🔉&lt;/p&gt;
+&lt;h2 id="what-am-i-going-to-see-here"&gt;What am I going to see here?
+&lt;/h2&gt;&lt;p&gt;I really just want to carve out a space that allows me to interact with a wider audience for the purposes of:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Education&lt;/li&gt;
+&lt;li&gt;Ideas sharing&lt;/li&gt;
+&lt;li&gt;Knowledge transfer&lt;/li&gt;
+&lt;li&gt;Upskilling&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Having experienced IT and tech the way that I did, I was able to get a look at what it was like when we ran most of our server environments in an on-premise setting. Now that cloud is much more prevalent, those on-premise experiences translate to how we do it in the cloud, even though those fundamental technologies still exist under the hood. Whilst they are obstructed, they are still important to learn and understand.
+This may end up being a two-way street. I&amp;rsquo;d love to learn more from you as well if we share a common interest!&lt;/p&gt;
+&lt;h2 id="where-are-you-working"&gt;Where are you working?
+&lt;/h2&gt;&lt;p&gt;I currently work for a consultancy called &lt;a class="link" href="https://mantelgroup.com.au/" target="_blank" rel="noopener"
+&gt;Mantel Group&lt;/a&gt; who specialise in cloud, data, digital and cyber security. My tenure here has been 4 years and counting. As an employer, they see me as more than a number and it&amp;rsquo;s refreshing from the ratrace of other establishments (who will remain nameless). I&amp;rsquo;m a Lead Consultant who works in the AWS Engineering space, specialising in migrations.&lt;/p&gt;
+&lt;h2 id="how-can-i-contact-you"&gt;How can I contact you?
+&lt;/h2&gt;&lt;p&gt;Feel free to hit me up on &lt;a class="link" href="linkedin.com/in/%f0%9f%9b%9c-patrick-conte-0a85312a" &gt;LinkedIn&lt;/a&gt;&lt;/p&gt;</description></item><item><title>Links</title><link>https://powershellpat.github.io/links/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://powershellpat.github.io/links/</guid><description/></item><item><title>Search</title><link>https://powershellpat.github.io/search/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://powershellpat.github.io/search/</guid><description/></item></channel></rss>

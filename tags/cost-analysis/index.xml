@@ -1,270 +1,270 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cost Analysis on Patrick Contes blog</title><link>https://powershellpat.github.io/tags/cost-analysis/</link><description>Recent content in Cost Analysis on Patrick Contes blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 08 Jul 2025 22:00:32 +1000</lastBuildDate><atom:link href="https://powershellpat.github.io/tags/cost-analysis/index.xml" rel="self" type="application/rss+xml"/><item><title>Designing Egress in AWS</title><link>https://powershellpat.github.io/p/designing-egress-in-aws/</link><pubDate>Tue, 08 Jul 2025 22:00:32 +1000</pubDate><guid>https://powershellpat.github.io/p/designing-egress-in-aws/</guid><description>&lt;img src="https://powershellpat.github.io/p/designing-egress-in-aws/cover.jpeg" alt="Featured image of post Designing Egress in AWS" />&lt;h2 id="introduction">Introduction
-&lt;/h2>&lt;p>AWS networking is fairly straightforward in a small setup. As a singular environment, you will generally have a single VPC that consists of:&lt;/p>
-&lt;ul>
-&lt;li>Subnets&lt;/li>
-&lt;li>Route tables&lt;/li>
-&lt;li>Network ACLs (NACLs)&lt;/li>
-&lt;li>Security groups&lt;/li>
-&lt;li>An Internet Gateway (IGW)&lt;/li>
-&lt;li>NAT Gateway(s)&lt;/li>
-&lt;/ul>
-&lt;p>There are other components, and even some of the ones mentioned here may not be required. You might have a single subnet for all of your resources. Likewise, a NAT Gateway may not even be necessary (this is rare — and anyone exposing private workloads to the internet unnecessarily is not following best practice).&lt;/p>
-&lt;p>But what about in more sophisticated setups, where you have multiple isolated networks in the form of several VPCs across different AWS accounts? You may need to introduce a shared services layer — an isolated VPC (or multiple, depending on your use case) that houses applications used to support your environment. Rather than duplicating these components inside each VPC, we share them (hence the name). To share these components, the VPCs need to be interconnected. AWS provides a service called Transit Gateway (TGW) to achieve exactly that, at scale.&lt;/p>
-&lt;p>Building on the shared services concept, NAT Gateways provide a solution that allows private subnets to connect to the internet for outbound (egress) traffic. They are deployed into public subnets (with a default route to an IGW) so that resources can route through the NAT Gateway to access the internet. NAT Gateways aren’t strictly bound to the VPC they are deployed in — you can use them across different VPCs if you choose, by leveraging a TGW.&lt;/p>
-&lt;p>With all of this context in mind, at what point does it make sense to use a NAT Gateway in each VPC (decentralised egress) versus using a TGW to route all internet traffic through a single VPC and set of NAT Gateways (centralised egress)? Which option is more cost-effective? Let’s find out.&lt;/p>
-&lt;h2 id="architecture-centralised-vs-decentralised">Architecture: Centralised vs decentralised
-&lt;/h2>&lt;p>Let’s begin by outlining each of the solutions and what they look like architecturally.&lt;/p>
-&lt;h3 id="centralised">Centralised
-&lt;/h3>&lt;ul>
-&lt;li>&lt;strong>VPC count:&lt;/strong> 4
-&lt;ul>
-&lt;li>&lt;strong>Workload VPCs:&lt;/strong> 3&lt;/li>
-&lt;li>&lt;strong>Egress VPC:&lt;/strong> 1&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;strong>Transit Gateway count:&lt;/strong> 1
-&lt;ul>
-&lt;li>&lt;strong>Transit Gateway attachments:&lt;/strong> 4&lt;/li>
-&lt;li>&lt;strong>Transit Gateway route tables:&lt;/strong> 1&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;strong>NAT Gateway count:&lt;/strong> 2 (both deployed into the Egress VPC)&lt;/li>
-&lt;/ul>
-&lt;p>Each VPC will be associated with a single Transit Gateway (TGW) route table and propagate its routes accordingly. A default route will be configured to point to the egress VPC, enabling a centralised egress pattern.&lt;/p>
-&lt;p>Each VPC will be created in a separate AWS account, except for the egress VPC, which (along with the TGW) will reside in a dedicated networking account. The TGW will be shared via AWS Resource Access Manager (RAM) to each respective AWS account, allowing TGW attachments to be created for each VPC.&lt;/p>
-&lt;p>This is what the architecture looks like:
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cost Analysis on Patrick Contes blog</title><link>https://powershellpat.github.io/tags/cost-analysis/</link><description>Recent content in Cost Analysis on Patrick Contes blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 08 Jul 2025 22:00:32 +1000</lastBuildDate><atom:link href="https://powershellpat.github.io/tags/cost-analysis/index.xml" rel="self" type="application/rss+xml"/><item><title>Designing Egress in AWS</title><link>https://powershellpat.github.io/p/designing-egress-in-aws/</link><pubDate>Tue, 08 Jul 2025 22:00:32 +1000</pubDate><guid>https://powershellpat.github.io/p/designing-egress-in-aws/</guid><description>&lt;img src="https://powershellpat.github.io/" alt="Featured image of post Designing Egress in AWS" /&gt;&lt;h2 id="introduction"&gt;Introduction
+&lt;/h2&gt;&lt;p&gt;AWS networking is fairly straightforward in a small setup. As a singular environment, you will generally have a single VPC that consists of:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Subnets&lt;/li&gt;
+&lt;li&gt;Route tables&lt;/li&gt;
+&lt;li&gt;Network ACLs (NACLs)&lt;/li&gt;
+&lt;li&gt;Security groups&lt;/li&gt;
+&lt;li&gt;An Internet Gateway (IGW)&lt;/li&gt;
+&lt;li&gt;NAT Gateway(s)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There are other components, and even some of the ones mentioned here may not be required. You might have a single subnet for all of your resources. Likewise, a NAT Gateway may not even be necessary (this is rare — and anyone exposing private workloads to the internet unnecessarily is not following best practice).&lt;/p&gt;
+&lt;p&gt;But what about in more sophisticated setups, where you have multiple isolated networks in the form of several VPCs across different AWS accounts? You may need to introduce a shared services layer — an isolated VPC (or multiple, depending on your use case) that houses applications used to support your environment. Rather than duplicating these components inside each VPC, we share them (hence the name). To share these components, the VPCs need to be interconnected. AWS provides a service called Transit Gateway (TGW) to achieve exactly that, at scale.&lt;/p&gt;
+&lt;p&gt;Building on the shared services concept, NAT Gateways provide a solution that allows private subnets to connect to the internet for outbound (egress) traffic. They are deployed into public subnets (with a default route to an IGW) so that resources can route through the NAT Gateway to access the internet. NAT Gateways aren’t strictly bound to the VPC they are deployed in — you can use them across different VPCs if you choose, by leveraging a TGW.&lt;/p&gt;
+&lt;p&gt;With all of this context in mind, at what point does it make sense to use a NAT Gateway in each VPC (decentralised egress) versus using a TGW to route all internet traffic through a single VPC and set of NAT Gateways (centralised egress)? Which option is more cost-effective? Let’s find out.&lt;/p&gt;
+&lt;h2 id="architecture-centralised-vs-decentralised"&gt;Architecture: Centralised vs decentralised
+&lt;/h2&gt;&lt;p&gt;Let’s begin by outlining each of the solutions and what they look like architecturally.&lt;/p&gt;
+&lt;h3 id="centralised"&gt;Centralised
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;VPC count:&lt;/strong&gt; 4
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Workload VPCs:&lt;/strong&gt; 3&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Egress VPC:&lt;/strong&gt; 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Transit Gateway count:&lt;/strong&gt; 1
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Transit Gateway attachments:&lt;/strong&gt; 4&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Transit Gateway route tables:&lt;/strong&gt; 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NAT Gateway count:&lt;/strong&gt; 2 (both deployed into the Egress VPC)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Each VPC will be associated with a single Transit Gateway (TGW) route table and propagate its routes accordingly. A default route will be configured to point to the egress VPC, enabling a centralised egress pattern.&lt;/p&gt;
+&lt;p&gt;Each VPC will be created in a separate AWS account, except for the egress VPC, which (along with the TGW) will reside in a dedicated networking account. The TGW will be shared via AWS Resource Access Manager (RAM) to each respective AWS account, allowing TGW attachments to be created for each VPC.&lt;/p&gt;
+&lt;p&gt;This is what the architecture looks like:
 &lt;img src="https://powershellpat.github.io/p/designing-egress-in-aws/centralised.png"
 width="697"
 height="1125"
-srcset="https://powershellpat.github.io/p/designing-egress-in-aws/centralised_hu_bace38ffe9a8c27a.png 480w, https://powershellpat.github.io/p/designing-egress-in-aws/centralised_hu_505e5e3f9f33c811.png 1024w"
+srcset="https://powershellpat.github.io/p/designing-egress-in-aws/centralised_hu_2c2bb8791c1f4371.png 480w, https://powershellpat.github.io/p/designing-egress-in-aws/centralised_hu_9ae02f94909ab1b1.png 1024w"
 loading="lazy"
 alt="Centralised solution"
 class="gallery-image"
 data-flex-grow="61"
 data-flex-basis="148px"
->&lt;/p>
-&lt;h3 id="decentralised">Decentralised
-&lt;/h3>&lt;ul>
-&lt;li>&lt;strong>VPC count:&lt;/strong> 3 (Workload VPCs only)&lt;/li>
-&lt;li>&lt;strong>Transit Gateway count:&lt;/strong> 1
-&lt;ul>
-&lt;li>&lt;strong>Transit Gateway attachments:&lt;/strong> 3&lt;/li>
-&lt;li>&lt;strong>Transit Gateway route tables:&lt;/strong> 1&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;strong>NAT Gateway count:&lt;/strong> 6 (2 in each workload VPC)&lt;/li>
-&lt;/ul>
-&lt;p>Each VPC will be associated with a single TGW route table and will propagate its routes accordingly. This route table will &lt;strong>not&lt;/strong> contain a default route, as traffic will exit locally via each VPCs NAT Gateways before reaching the TGW.&lt;/p>
-&lt;p>Each VPC will be created in separate AWS accounts. The TGW will again be created in the networking account and RAM shared to each AWS account to allow for TGW attachments per VPC.&lt;/p>
-&lt;p>This is what the architecture looks like:
+&gt;&lt;/p&gt;
+&lt;h3 id="decentralised"&gt;Decentralised
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;VPC count:&lt;/strong&gt; 3 (Workload VPCs only)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Transit Gateway count:&lt;/strong&gt; 1
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Transit Gateway attachments:&lt;/strong&gt; 3&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Transit Gateway route tables:&lt;/strong&gt; 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NAT Gateway count:&lt;/strong&gt; 6 (2 in each workload VPC)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Each VPC will be associated with a single TGW route table and will propagate its routes accordingly. This route table will &lt;strong&gt;not&lt;/strong&gt; contain a default route, as traffic will exit locally via each VPCs NAT Gateways before reaching the TGW.&lt;/p&gt;
+&lt;p&gt;Each VPC will be created in separate AWS accounts. The TGW will again be created in the networking account and RAM shared to each AWS account to allow for TGW attachments per VPC.&lt;/p&gt;
+&lt;p&gt;This is what the architecture looks like:
 &lt;img src="https://powershellpat.github.io/p/designing-egress-in-aws/decentralised.png"
 width="701"
 height="1035"
-srcset="https://powershellpat.github.io/p/designing-egress-in-aws/decentralised_hu_d0d8ba7e79e8c972.png 480w, https://powershellpat.github.io/p/designing-egress-in-aws/decentralised_hu_8cfe4ff35c53ecea.png 1024w"
+srcset="https://powershellpat.github.io/p/designing-egress-in-aws/decentralised_hu_90043dbfbe233508.png 480w, https://powershellpat.github.io/p/designing-egress-in-aws/decentralised_hu_4087db33164ab5e6.png 1024w"
 loading="lazy"
 alt="Decentralised solution"
 class="gallery-image"
 data-flex-grow="67"
 data-flex-basis="162px"
->&lt;/p>
-&lt;p>Now that the architectures are defined, let’s dig deeper into the pricing of each component.&lt;/p>
-&lt;h2 id="pricing-models">Pricing models
-&lt;/h2>&lt;h3 id="nat-gateways">NAT Gateways
-&lt;/h3>&lt;p>NAT Gateways have a simple pricing model. You pay for two main things:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>Hourly cost per NAT Gateway&lt;/strong>&lt;/li>
-&lt;li>&lt;strong>Data processed (in GB) by the NAT Gateway&lt;/strong>&lt;/li>
-&lt;/ul>
-&lt;p>The source or destination of the traffic is irrelevant — if the data passes through the NAT Gateway, you&amp;rsquo;re paying for it.&lt;/p>
-&lt;p>In addition to NAT Gateway costs, there are data transfer fees for services like EC2. This includes:&lt;/p>
-&lt;ul>
-&lt;li>Traffic going out to the internet&lt;/li>
-&lt;li>Traffic sent to other AWS regions&lt;/li>
-&lt;li>Traffic sent between Availability Zones (AZs) within the same region&lt;/li>
-&lt;/ul>
-&lt;p>It’s also worth mentioning that &lt;strong>VPCs themselves are free&lt;/strong>. While components inside a VPC (like NAT Gateways) may incur costs, the VPC construct has no cost on its own. So for this comparison, we’ll only factor in the pricing for NAT Gateways.&lt;/p>
-&lt;h3 id="transit-gateways">Transit Gateways
-&lt;/h3>&lt;p>Transit Gateways follow a similar pricing model to NAT Gateways. You pay for:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>Hourly cost per Transit Gateway attachment&lt;/strong>&lt;/li>
-&lt;li>&lt;strong>Data processed (in GB) by the Transit Gateway&lt;/strong>&lt;/li>
-&lt;/ul>
-&lt;p>As with NAT Gateways, data transfer fees for services like EC2 still apply and should be considered — especially for inter-AZ or inter-region traffic.&lt;/p>
-&lt;h2 id="cost-breakdown">Cost breakdown
-&lt;/h2>&lt;p>To calculate actual costs, we need to use the pricing from an AWS region. For this exercise, we’ll use the &lt;strong>AWS Sydney region&lt;/strong> (&lt;code>ap-southeast-2&lt;/code>). Based on this region, the pricing is as follows:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>NAT Gateway&lt;/strong>
-&lt;ul>
-&lt;li>&lt;strong>Hourly fee:&lt;/strong> $0.059&lt;/li>
-&lt;li>&lt;strong>Per GB of data processed:&lt;/strong> $0.059&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;strong>Transit Gateway:&lt;/strong>
-&lt;ul>
-&lt;li>&lt;strong>Hourly fee (per attachment):&lt;/strong> $0.07&lt;/li>
-&lt;li>&lt;strong>Per GB of data processed:&lt;/strong> $0.02&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>For both the centralised and decentralised solutions already outlined, we’ll assume &lt;strong>100 GB of data processed&lt;/strong> in total. We’ll also assume a billing duration of &lt;strong>30 days (720 hours)&lt;/strong> for the hourly costs.&lt;/p>
-&lt;p>Although both solutions will incur data transfer fees (e.g. to the internet, to other AWS regions, or between AZs within a region), these are identical in both cases. As such, we’ve &lt;strong>excluded&lt;/strong> them from this comparison to focus only on the NAT and Transit Gateway pricing.&lt;/p>
-&lt;h3 id="centralised-cost-breakdown">Centralised cost breakdown
-&lt;/h3>&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>Component&lt;/th>
-&lt;th>Cost&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>NAT Gateway 1 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway 2 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway (data processing)&lt;/td>
-&lt;td>$5.90&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (Egress VPC attachment)&lt;/td>
-&lt;td>$50.40&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (Workload A VPC attachment)&lt;/td>
-&lt;td>$50.40&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (Workload B VPC attachment)&lt;/td>
-&lt;td>$50.40&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (Workload C VPC attachment)&lt;/td>
-&lt;td>$50.40&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (data processing)&lt;/td>
-&lt;td>$2&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>&lt;strong>Total&lt;/strong>&lt;/td>
-&lt;td>&lt;strong>$294.46&lt;/strong>&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;h3 id="decentralised-cost-breakdown">Decentralised cost breakdown
-&lt;/h3>&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>Component&lt;/th>
-&lt;th>Cost&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>NAT Gateway 1 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway 2 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway 3 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway 4 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway 5 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway 6 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway (data processing)&lt;/td>
-&lt;td>$5.90&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (Workload A VPC attachment)&lt;/td>
-&lt;td>$50.40&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (Workload B VPC attachment)&lt;/td>
-&lt;td>$50.40&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (Workload C VPC attachment)&lt;/td>
-&lt;td>$50.40&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (data processing)&lt;/td>
-&lt;td>$2&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>&lt;strong>Total&lt;/strong>&lt;/td>
-&lt;td>&lt;strong>$413.98&lt;/strong>&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;h2 id="findings">Findings
-&lt;/h2>&lt;p>With the findings in tow, it&amp;rsquo;s clear which solution is more cost-effective based on the defined setup. The &lt;strong>centralised egress solution&lt;/strong> comes out ahead in terms of cost when compared to the decentralised one — &lt;strong>as long as the assumptions hold.&lt;/strong>&lt;/p>
-&lt;p>However, there are edge cases worth exploring. Also, note that we used a &amp;ldquo;magic number&amp;rdquo; of &lt;strong>6 NAT Gateways&lt;/strong> in the decentralised setup — something we’ll expand on shortly.&lt;/p>
-&lt;h3 id="what-if-fewer-vpcs-needed-egress">What if fewer VPCs needed egress?
-&lt;/h3>&lt;p>Suppose only &lt;strong>one of the three workload VPCs&lt;/strong> in the decentralised solution actually required egress access (and therefore NAT Gateways). If you removed &lt;strong>4 of the 6&lt;/strong> NAT Gateways, your total would drop to &lt;strong>$244.06 — cheaper than the centralised solution.&lt;/strong>&lt;/p>
-&lt;h3 id="what-if-you-removed-the-transit-gateway">What If You Removed the Transit Gateway?
-&lt;/h3>&lt;p>Now imagine removing the Transit Gateway from the decentralised solution entirely, and each of the &lt;strong>three VPCs&lt;/strong> had their own &lt;strong>local NAT Gateways&lt;/strong>, but no interconnection. In that case, the total cost would come to &lt;strong>$260.78&lt;/strong> — not as low as the previous example, but &lt;strong>still cheaper than the centralised solution&lt;/strong> (at $294.46).&lt;/p>
-&lt;h3 id="why-we-used-3-vpcs-as-a-baseline">Why We Used 3 VPCs as a Baseline
-&lt;/h3>&lt;p>The reason we compared &lt;strong>three workload VPCs&lt;/strong> and &lt;strong>6 NAT Gateways&lt;/strong> is that this configuration represents a cost-efficiency threshold. Beyond this point, the &lt;strong>decentralised approach starts to suffer from diminishing returns.&lt;/strong>&lt;/p>
-&lt;p>While it may seem obvious to adopt a centralised solution, there&amp;rsquo;s a case to be made for starting with decentralised egress — especially in &lt;strong>early-stage AWS environments&lt;/strong> that aren’t yet interconnected. If the VPCs remain isolated, decentralised egress might be more cost-effective. But &lt;strong>as soon as inter-VPC connectivity is required&lt;/strong>, the decentralised model becomes significantly less economical.&lt;/p>
-&lt;h3 id="additional-cost-scenarios">Additional cost scenarios
-&lt;/h3>&lt;p>Here are some expanded scenarios to help illustrate the cost impact at scale:&lt;/p>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>Scenario&lt;/th>
-&lt;th>Total Cost&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>Decentralised: 4 VPCs, 8 NAT Gateways, 0 TGW&lt;/td>
-&lt;td>$345.74&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Centralised: 4 VPCs + 1 egress VPC, 2 NAT Gateways, 5 TGW attachments&lt;/td>
-&lt;td>$344.86&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Decentralised: 5 VPCs, 10 NAT Gateways, 0 TGW&lt;/td>
-&lt;td>$430.70&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Centralised: 5 VPCs + 1 egress VPC, 2 NAT Gateways, 6 TGW attachments&lt;/td>
-&lt;td>$395.26&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;p>As shown above, once you pass three VPCs, the centralised model quickly becomes more attractive from a cost perspective.&lt;/p>
-&lt;h2 id="centralised-solution-benefits">Centralised solution benefits
-&lt;/h2>&lt;p>While the primary focus of this blog is cost, not everything comes down to price. Ultimately, the real question is: &lt;strong>what are you willing to pay for best practice and a secure, scalable setup?&lt;/strong>&lt;/p>
-&lt;p>AWS provides several services that enhance security at the networking layer. Two key examples include:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>AWS Network Firewall&lt;/strong> – a fully managed stateful firewall service&lt;/li>
-&lt;li>&lt;strong>Gateway Load Balancer (GWLB)&lt;/strong> – supports third-party firewalls in a “bump-in-the-wire” architecture&lt;/li>
-&lt;/ul>
-&lt;p>Both of these services are designed to operate in a centralised model, enabling consistent inspection of traffic — whether it&amp;rsquo;s north/south (in and out of the AWS network) or east/west (between VPCs/subnets). Any traffic that bypasses these centralised inspection points risks being unauthorised or even malicious. Without a centralised architecture, enforcing an inspection solution across multiple VPCs becomes near impossible.&lt;/p>
-&lt;p>If you needed any more reasons to lean toward a centralised model — regardless of cost — the ability to integrate services like AWS Network Firewall and Gateway Load Balancer should be near the top of the list.&lt;/p>
-&lt;h2 id="conclusion">Conclusion
-&lt;/h2>&lt;p>Egress traffic in AWS must traverse some kind of gateway to reach the internet. For private subnets, this means using a &lt;strong>NAT Gateway&lt;/strong>. As we’ve explored, NAT Gateways can either be &lt;strong>local to each VPC&lt;/strong> or located in a &lt;strong>centralised egress VPC&lt;/strong>, connected via a &lt;strong>Transit Gateway.&lt;/strong>&lt;/p>
-&lt;p>Centralised solutions work best at scale and offer stronger alignment with AWS’s security services. Decentralised solutions, on the other hand, are often more suitable for &lt;strong>smaller environments&lt;/strong> — either early in their cloud journey or intentionally minimal in scope.&lt;/p>
-&lt;p>The next time you&amp;rsquo;re designing how traffic should leave your AWS environment, consider the &lt;strong>long-term direction, cost implications, security posture&lt;/strong>, and — most importantly — &lt;strong>what the environment needs to function effectively.&lt;/strong>&lt;/p>
-&lt;p>Cover image generated by &lt;a class="link" href="https://deepai.org/" target="_blank" rel="noopener"
->DeepAI&lt;/a>&lt;/p></description></item></channel></rss>
+&gt;&lt;/p&gt;
+&lt;p&gt;Now that the architectures are defined, let’s dig deeper into the pricing of each component.&lt;/p&gt;
+&lt;h2 id="pricing-models"&gt;Pricing models
+&lt;/h2&gt;&lt;h3 id="nat-gateways"&gt;NAT Gateways
+&lt;/h3&gt;&lt;p&gt;NAT Gateways have a simple pricing model. You pay for two main things:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Hourly cost per NAT Gateway&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Data processed (in GB) by the NAT Gateway&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The source or destination of the traffic is irrelevant — if the data passes through the NAT Gateway, you&amp;rsquo;re paying for it.&lt;/p&gt;
+&lt;p&gt;In addition to NAT Gateway costs, there are data transfer fees for services like EC2. This includes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Traffic going out to the internet&lt;/li&gt;
+&lt;li&gt;Traffic sent to other AWS regions&lt;/li&gt;
+&lt;li&gt;Traffic sent between Availability Zones (AZs) within the same region&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;It’s also worth mentioning that &lt;strong&gt;VPCs themselves are free&lt;/strong&gt;. While components inside a VPC (like NAT Gateways) may incur costs, the VPC construct has no cost on its own. So for this comparison, we’ll only factor in the pricing for NAT Gateways.&lt;/p&gt;
+&lt;h3 id="transit-gateways"&gt;Transit Gateways
+&lt;/h3&gt;&lt;p&gt;Transit Gateways follow a similar pricing model to NAT Gateways. You pay for:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Hourly cost per Transit Gateway attachment&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Data processed (in GB) by the Transit Gateway&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;As with NAT Gateways, data transfer fees for services like EC2 still apply and should be considered — especially for inter-AZ or inter-region traffic.&lt;/p&gt;
+&lt;h2 id="cost-breakdown"&gt;Cost breakdown
+&lt;/h2&gt;&lt;p&gt;To calculate actual costs, we need to use the pricing from an AWS region. For this exercise, we’ll use the &lt;strong&gt;AWS Sydney region&lt;/strong&gt; (&lt;code&gt;ap-southeast-2&lt;/code&gt;). Based on this region, the pricing is as follows:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;NAT Gateway&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Hourly fee:&lt;/strong&gt; $0.059&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Per GB of data processed:&lt;/strong&gt; $0.059&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Transit Gateway:&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Hourly fee (per attachment):&lt;/strong&gt; $0.07&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Per GB of data processed:&lt;/strong&gt; $0.02&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For both the centralised and decentralised solutions already outlined, we’ll assume &lt;strong&gt;100 GB of data processed&lt;/strong&gt; in total. We’ll also assume a billing duration of &lt;strong&gt;30 days (720 hours)&lt;/strong&gt; for the hourly costs.&lt;/p&gt;
+&lt;p&gt;Although both solutions will incur data transfer fees (e.g. to the internet, to other AWS regions, or between AZs within a region), these are identical in both cases. As such, we’ve &lt;strong&gt;excluded&lt;/strong&gt; them from this comparison to focus only on the NAT and Transit Gateway pricing.&lt;/p&gt;
+&lt;h3 id="centralised-cost-breakdown"&gt;Centralised cost breakdown
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Component&lt;/th&gt;
+&lt;th&gt;Cost&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 1 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 2 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway (data processing)&lt;/td&gt;
+&lt;td&gt;$5.90&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (Egress VPC attachment)&lt;/td&gt;
+&lt;td&gt;$50.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (Workload A VPC attachment)&lt;/td&gt;
+&lt;td&gt;$50.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (Workload B VPC attachment)&lt;/td&gt;
+&lt;td&gt;$50.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (Workload C VPC attachment)&lt;/td&gt;
+&lt;td&gt;$50.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (data processing)&lt;/td&gt;
+&lt;td&gt;$2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Total&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;$294.46&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="decentralised-cost-breakdown"&gt;Decentralised cost breakdown
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Component&lt;/th&gt;
+&lt;th&gt;Cost&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 1 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 2 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 3 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 4 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 5 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 6 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway (data processing)&lt;/td&gt;
+&lt;td&gt;$5.90&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (Workload A VPC attachment)&lt;/td&gt;
+&lt;td&gt;$50.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (Workload B VPC attachment)&lt;/td&gt;
+&lt;td&gt;$50.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (Workload C VPC attachment)&lt;/td&gt;
+&lt;td&gt;$50.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (data processing)&lt;/td&gt;
+&lt;td&gt;$2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Total&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;$413.98&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="findings"&gt;Findings
+&lt;/h2&gt;&lt;p&gt;With the findings in tow, it&amp;rsquo;s clear which solution is more cost-effective based on the defined setup. The &lt;strong&gt;centralised egress solution&lt;/strong&gt; comes out ahead in terms of cost when compared to the decentralised one — &lt;strong&gt;as long as the assumptions hold.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;However, there are edge cases worth exploring. Also, note that we used a &amp;ldquo;magic number&amp;rdquo; of &lt;strong&gt;6 NAT Gateways&lt;/strong&gt; in the decentralised setup — something we’ll expand on shortly.&lt;/p&gt;
+&lt;h3 id="what-if-fewer-vpcs-needed-egress"&gt;What if fewer VPCs needed egress?
+&lt;/h3&gt;&lt;p&gt;Suppose only &lt;strong&gt;one of the three workload VPCs&lt;/strong&gt; in the decentralised solution actually required egress access (and therefore NAT Gateways). If you removed &lt;strong&gt;4 of the 6&lt;/strong&gt; NAT Gateways, your total would drop to &lt;strong&gt;$244.06 — cheaper than the centralised solution.&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id="what-if-you-removed-the-transit-gateway"&gt;What If You Removed the Transit Gateway?
+&lt;/h3&gt;&lt;p&gt;Now imagine removing the Transit Gateway from the decentralised solution entirely, and each of the &lt;strong&gt;three VPCs&lt;/strong&gt; had their own &lt;strong&gt;local NAT Gateways&lt;/strong&gt;, but no interconnection. In that case, the total cost would come to &lt;strong&gt;$260.78&lt;/strong&gt; — not as low as the previous example, but &lt;strong&gt;still cheaper than the centralised solution&lt;/strong&gt; (at $294.46).&lt;/p&gt;
+&lt;h3 id="why-we-used-3-vpcs-as-a-baseline"&gt;Why We Used 3 VPCs as a Baseline
+&lt;/h3&gt;&lt;p&gt;The reason we compared &lt;strong&gt;three workload VPCs&lt;/strong&gt; and &lt;strong&gt;6 NAT Gateways&lt;/strong&gt; is that this configuration represents a cost-efficiency threshold. Beyond this point, the &lt;strong&gt;decentralised approach starts to suffer from diminishing returns.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;While it may seem obvious to adopt a centralised solution, there&amp;rsquo;s a case to be made for starting with decentralised egress — especially in &lt;strong&gt;early-stage AWS environments&lt;/strong&gt; that aren’t yet interconnected. If the VPCs remain isolated, decentralised egress might be more cost-effective. But &lt;strong&gt;as soon as inter-VPC connectivity is required&lt;/strong&gt;, the decentralised model becomes significantly less economical.&lt;/p&gt;
+&lt;h3 id="additional-cost-scenarios"&gt;Additional cost scenarios
+&lt;/h3&gt;&lt;p&gt;Here are some expanded scenarios to help illustrate the cost impact at scale:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Scenario&lt;/th&gt;
+&lt;th&gt;Total Cost&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Decentralised: 4 VPCs, 8 NAT Gateways, 0 TGW&lt;/td&gt;
+&lt;td&gt;$345.74&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Centralised: 4 VPCs + 1 egress VPC, 2 NAT Gateways, 5 TGW attachments&lt;/td&gt;
+&lt;td&gt;$344.86&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Decentralised: 5 VPCs, 10 NAT Gateways, 0 TGW&lt;/td&gt;
+&lt;td&gt;$430.70&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Centralised: 5 VPCs + 1 egress VPC, 2 NAT Gateways, 6 TGW attachments&lt;/td&gt;
+&lt;td&gt;$395.26&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;As shown above, once you pass three VPCs, the centralised model quickly becomes more attractive from a cost perspective.&lt;/p&gt;
+&lt;h2 id="centralised-solution-benefits"&gt;Centralised solution benefits
+&lt;/h2&gt;&lt;p&gt;While the primary focus of this blog is cost, not everything comes down to price. Ultimately, the real question is: &lt;strong&gt;what are you willing to pay for best practice and a secure, scalable setup?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;AWS provides several services that enhance security at the networking layer. Two key examples include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AWS Network Firewall&lt;/strong&gt; – a fully managed stateful firewall service&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gateway Load Balancer (GWLB)&lt;/strong&gt; – supports third-party firewalls in a “bump-in-the-wire” architecture&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Both of these services are designed to operate in a centralised model, enabling consistent inspection of traffic — whether it&amp;rsquo;s north/south (in and out of the AWS network) or east/west (between VPCs/subnets). Any traffic that bypasses these centralised inspection points risks being unauthorised or even malicious. Without a centralised architecture, enforcing an inspection solution across multiple VPCs becomes near impossible.&lt;/p&gt;
+&lt;p&gt;If you needed any more reasons to lean toward a centralised model — regardless of cost — the ability to integrate services like AWS Network Firewall and Gateway Load Balancer should be near the top of the list.&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Egress traffic in AWS must traverse some kind of gateway to reach the internet. For private subnets, this means using a &lt;strong&gt;NAT Gateway&lt;/strong&gt;. As we’ve explored, NAT Gateways can either be &lt;strong&gt;local to each VPC&lt;/strong&gt; or located in a &lt;strong&gt;centralised egress VPC&lt;/strong&gt;, connected via a &lt;strong&gt;Transit Gateway.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Centralised solutions work best at scale and offer stronger alignment with AWS’s security services. Decentralised solutions, on the other hand, are often more suitable for &lt;strong&gt;smaller environments&lt;/strong&gt; — either early in their cloud journey or intentionally minimal in scope.&lt;/p&gt;
+&lt;p&gt;The next time you&amp;rsquo;re designing how traffic should leave your AWS environment, consider the &lt;strong&gt;long-term direction, cost implications, security posture&lt;/strong&gt;, and — most importantly — &lt;strong&gt;what the environment needs to function effectively.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Cover image generated by &lt;a class="link" href="https://deepai.org/" target="_blank" rel="noopener"
+&gt;DeepAI&lt;/a&gt;&lt;/p&gt;</description></item></channel></rss>

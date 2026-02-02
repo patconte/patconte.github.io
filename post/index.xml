@@ -1,350 +1,402 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Patrick Contes blog</title><link>https://powershellpat.github.io/post/</link><description>Recent content in Posts on Patrick Contes blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 08 Jul 2025 22:00:32 +1000</lastBuildDate><atom:link href="https://powershellpat.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Designing Egress in AWS</title><link>https://powershellpat.github.io/p/designing-egress-in-aws/</link><pubDate>Tue, 08 Jul 2025 22:00:32 +1000</pubDate><guid>https://powershellpat.github.io/p/designing-egress-in-aws/</guid><description>&lt;img src="https://powershellpat.github.io/p/designing-egress-in-aws/cover.jpeg" alt="Featured image of post Designing Egress in AWS" />&lt;h2 id="introduction">Introduction
-&lt;/h2>&lt;p>AWS networking is fairly straightforward in a small setup. As a singular environment, you will generally have a single VPC that consists of:&lt;/p>
-&lt;ul>
-&lt;li>Subnets&lt;/li>
-&lt;li>Route tables&lt;/li>
-&lt;li>Network ACLs (NACLs)&lt;/li>
-&lt;li>Security groups&lt;/li>
-&lt;li>An Internet Gateway (IGW)&lt;/li>
-&lt;li>NAT Gateway(s)&lt;/li>
-&lt;/ul>
-&lt;p>There are other components, and even some of the ones mentioned here may not be required. You might have a single subnet for all of your resources. Likewise, a NAT Gateway may not even be necessary (this is rare — and anyone exposing private workloads to the internet unnecessarily is not following best practice).&lt;/p>
-&lt;p>But what about in more sophisticated setups, where you have multiple isolated networks in the form of several VPCs across different AWS accounts? You may need to introduce a shared services layer — an isolated VPC (or multiple, depending on your use case) that houses applications used to support your environment. Rather than duplicating these components inside each VPC, we share them (hence the name). To share these components, the VPCs need to be interconnected. AWS provides a service called Transit Gateway (TGW) to achieve exactly that, at scale.&lt;/p>
-&lt;p>Building on the shared services concept, NAT Gateways provide a solution that allows private subnets to connect to the internet for outbound (egress) traffic. They are deployed into public subnets (with a default route to an IGW) so that resources can route through the NAT Gateway to access the internet. NAT Gateways aren’t strictly bound to the VPC they are deployed in — you can use them across different VPCs if you choose, by leveraging a TGW.&lt;/p>
-&lt;p>With all of this context in mind, at what point does it make sense to use a NAT Gateway in each VPC (decentralised egress) versus using a TGW to route all internet traffic through a single VPC and set of NAT Gateways (centralised egress)? Which option is more cost-effective? Let’s find out.&lt;/p>
-&lt;h2 id="architecture-centralised-vs-decentralised">Architecture: Centralised vs decentralised
-&lt;/h2>&lt;p>Let’s begin by outlining each of the solutions and what they look like architecturally.&lt;/p>
-&lt;h3 id="centralised">Centralised
-&lt;/h3>&lt;ul>
-&lt;li>&lt;strong>VPC count:&lt;/strong> 4
-&lt;ul>
-&lt;li>&lt;strong>Workload VPCs:&lt;/strong> 3&lt;/li>
-&lt;li>&lt;strong>Egress VPC:&lt;/strong> 1&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;strong>Transit Gateway count:&lt;/strong> 1
-&lt;ul>
-&lt;li>&lt;strong>Transit Gateway attachments:&lt;/strong> 4&lt;/li>
-&lt;li>&lt;strong>Transit Gateway route tables:&lt;/strong> 1&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;strong>NAT Gateway count:&lt;/strong> 2 (both deployed into the Egress VPC)&lt;/li>
-&lt;/ul>
-&lt;p>Each VPC will be associated with a single Transit Gateway (TGW) route table and propagate its routes accordingly. A default route will be configured to point to the egress VPC, enabling a centralised egress pattern.&lt;/p>
-&lt;p>Each VPC will be created in a separate AWS account, except for the egress VPC, which (along with the TGW) will reside in a dedicated networking account. The TGW will be shared via AWS Resource Access Manager (RAM) to each respective AWS account, allowing TGW attachments to be created for each VPC.&lt;/p>
-&lt;p>This is what the architecture looks like:
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Patrick Contes blog</title><link>https://powershellpat.github.io/post/</link><description>Recent content in Posts on Patrick Contes blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 02 Feb 2026 10:05:32 +1000</lastBuildDate><atom:link href="https://powershellpat.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Tailwind CSS: A warning for open source projects in the age of AI</title><link>https://powershellpat.github.io/p/tailwind-css-a-warning-for-open-source-projects-in-the-age-of-ai/</link><pubDate>Mon, 02 Feb 2026 10:05:32 +1000</pubDate><guid>https://powershellpat.github.io/p/tailwind-css-a-warning-for-open-source-projects-in-the-age-of-ai/</guid><description>&lt;img src="https://powershellpat.github.io/" alt="Featured image of post Tailwind CSS: A warning for open source projects in the age of AI" /&gt;&lt;p&gt;AI is rapidly evolving. This is a known fact and should come as no surprise. The next frontier will likely emerge in the agentic space, focused on fully working out how to make agents do the bidding of their overlords. As of early 2026, the latest trend is &lt;a class="link" href="https://agentskills.io/home" target="_blank" rel="noopener"
+&gt;&lt;em&gt;Agent Skills&lt;/em&gt;&lt;/a&gt; — a powerful mechanism that allows you to define a structured set of instructions within a given context or framework, controlling how an agent performs a specific set of tasks.&lt;/p&gt;
+&lt;p&gt;Bundled into this new AI-driven world that we live in is the software we use everyday. In the realm of software engineering, AI will happily rely on existing tools it has been trained on, knowing exactly how to write their syntax. This eliminates the need to research documentation or figure out how to structure a codebase. Where this becomes a problem is when those tools are open source projects that rely on user traffic to their websites to advertise commercial offerings. One such example is Tailwind CSS. Despite being widely popular, it is now facing the possibility of becoming abandonware due to an inability to sustainably fund its maintenance team.&lt;/p&gt;
+&lt;p&gt;Is this a precursor to what’s to come for Open Source Software (OSS)? Will some projects simply fade away after being abandoned by their communities?&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Disclaimer&lt;/strong&gt;: OSS doesn’t always mean free — it means the source code is open. Anyone can inspect it, modify it, redistribute it, and use it. There may be limitations depending on the license associated with the project. However, the source code remains accessible, and in most cases, you are free to do what you want with it.&lt;/p&gt;
+&lt;h2 id="the-oss-dilemma"&gt;The OSS dilemma
+&lt;/h2&gt;&lt;p&gt;OSS collectively struggling with funding and contribution is nothing new. Some projects manage to buck this trend through specific revenue streams, but the majority rely on communities of developers coming together to make the software work. Most of this effort is time donated out of generosity, with contributors receiving very little in return. Rarely do developers make a sustainable living purely by contributing to OSS. Instead, most treat it as a hobby — something done in the evenings or on weekends, while juggling regular jobs and other commitments. While the cause is noble and honourable, it’s not going to pay the bills.&lt;/p&gt;
+&lt;p&gt;Fundamentally and in principle, OSS is great. It allows consumers to access software that would otherwise be unavailable to them. You need only look at your own device to see how many products you use every day that you didn’t directly pay for. For me, as a macOS user, this includes applications such as:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Homebrew&lt;/li&gt;
+&lt;li&gt;Docker/Colima&lt;/li&gt;
+&lt;li&gt;Golang&lt;/li&gt;
+&lt;li&gt;Hugo (website framework)&lt;/li&gt;
+&lt;li&gt;Kind (Kubernetes sandpit)&lt;/li&gt;
+&lt;li&gt;Terraform&lt;/li&gt;
+&lt;li&gt;Pike (AWS IAM policy writer)&lt;/li&gt;
+&lt;li&gt;Python&lt;/li&gt;
+&lt;li&gt;Drawio&lt;/li&gt;
+&lt;li&gt;Multipass (Local VM runner)&lt;/li&gt;
+&lt;li&gt;Obsidian (Note taking app)&lt;/li&gt;
+&lt;li&gt;Rectangle (Screen management)&lt;/li&gt;
+&lt;li&gt;VS code&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;From this list, some products have commercial offerings. Docker, for example, was originally completely open source but later began commercialising certain components, such as Docker Desktop. You can still run Docker “for free” so long as you use an alternative runtime like Colima.&lt;/p&gt;
+&lt;p&gt;This is where the OSS dilemma emerges. On one hand, we have access to an incredible suite of tools. On the other, those who maintain and contribute to these tools receive little in return beyond personal satisfaction and a sense of community. Participation alone, however meaningful, does not translate into long-term sustainability.&lt;/p&gt;
+&lt;h2 id="tailwind-css-business-model"&gt;Tailwind CSS’ business model
+&lt;/h2&gt;&lt;p&gt;To work around the broader OSS funding dilemma, companies and maintainers are often forced to get creative. In the case of Tailwind CSS, revenue is primarily driven through:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Sponsorships&lt;/li&gt;
+&lt;li&gt;A premium product (Tailwind Plus)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Most OSS projects adopt a similar approach, offering paid options that unlock additional features or convenience. From the earlier list, Docker offers Docker Desktop, Terraform has been steadily moving toward more restrictive free-tier options following HashiCorp’s acquisition by IBM, and both Obsidian and Rectangle provide premium tiers that unlock extra functionality.&lt;/p&gt;
+&lt;p&gt;Despite these offerings, returning to the earlier point about AI not needing—or caring about—these monetisation mechanisms, the companies behind such tools can still struggle. In December 2025, Tailwind CSS laid off 75% of its engineering team. That figure sounds dramatic, but it’s worth remembering that it represents a percentage rather than an absolute number. In practice, this reportedly amounted to &lt;a class="link" href="https://aihola.com/article/tailwind-css-ai-crisis-tech-sponsorships-2026?utm_source=chatgpt.com#:~:text=The%20math%20that%20doesn%27t%20work" target="_blank" rel="noopener"
+&gt;three engineers losing their jobs&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;At face value, this may not seem groundbreaking. However, consider how much reliance we place on these tools. Without OSS, we would be nowhere near as technologically advanced as we are today, and the digital age would look markedly different.&lt;/p&gt;
+&lt;p&gt;An AI tool is here to get a job done. Whatever prompt it is given, it will strive to achieve that goal using the information that it has available. If the tool that it relies on works, and the pattern is repeatable rather than esoteric, it becomes trivially easy for an AI model to generate the code you need—without ever engaging with the ecosystem that sustains it.&lt;/p&gt;
+&lt;h2 id="when-adoption-doesnt-equal-growth"&gt;When adoption doesn’t equal growth
+&lt;/h2&gt;&lt;p&gt;As AI becomes a prominent part of the software creation process, it bypasses the traditional systems and mechanisms that once drove revenue. Without those pathways, some projects may simply be unsustainable and be unable to continue.
+This creates a strange phenomenon: adoption without growth. In most other contexts, this would be unheard of. Consider a traditional business selling cosmetics. The products are a hit — widely popular among consumers — and the business expands accordingly. Revenue climbs, the company scales, and founders and executives are well compensated as the organisation thrives. This is what we typically expect when a product succeeds.
+Open source breaks this assumption. Consumers often expect that a product they obtained for free will simply continue to exist. They can continue to use it, without having to pay for it, and even profit from it.
+This is a deeply polarising aspect of OSS. Software that was freely obtained is used to generate revenue — sometimes significant revenue — while the project enabling that success quietly struggles to survive.&lt;/p&gt;
+&lt;p&gt;In what logical sense is that fair? Getting something for nothing, using it for personal or commercial gain, and continuing to expect it to persist indefinitely? It feels (and is) unreasonable when examined closely. Yet this is exactly the dynamic at play — and one that AI now accelerates rather than alleviates.&lt;/p&gt;
+&lt;h2 id="not-an-isolated-issue"&gt;Not an isolated issue
+&lt;/h2&gt;&lt;p&gt;Any OSS project that relies on human interaction with its resources to continue to operate may eventually face the same fate. Tailwind CSS is simply the catalyst. As AI continues to abstract users away from documentation, communities, and project ecosystems, more OSS projects may struggle to sustain themselves and ultimately fold.&lt;/p&gt;
+&lt;p&gt;This should be a consideration for how we use OSS in the future. Some projects may already be in trouble without any publicity. It could be something that is happening behind the scenes. What is the most concerning here is that OSS is used in many different capacities. It is used at an individual level, at a small business level, and extends all the way to the largest corporations — often using the exact same tools. Yet corporations, collectively, are unlikely to donate back to these projects. They have little incentive to. If the product is on offer for free, why would they? Imagine how that conversation would go with the financial team when it came time to raise a purchase order. It affects the bottom line, and if there is anything organisations always need more of, it&amp;rsquo;s money!&lt;/p&gt;
+&lt;h2 id="turning-point-and-the-future-of-oss"&gt;Turning point and the future of OSS
+&lt;/h2&gt;&lt;p&gt;Tailwind CSS faces an uncertain future. Further reports are yet to emerge on how it is tracking financially or what its future holds. &lt;a class="link" href="https://aihola.com/article/tailwind-css-ai-crisis-tech-sponsorships-2026?utm_source=chatgpt.com#:~:text=And%20then%20the%20cavalry%20showed%20up" target="_blank" rel="noopener"
+&gt;Sources&lt;/a&gt; suggest that some larger corporations and individuals who rely on Tailwind CSS have stepped forward to offer donations. However, there are concerns about how much is actually being raised and whether it is sufficient to pull Tailwind out of its current financial rut. Time will tell how it all plays out — and whether the internet will eventually need another CSS framework in the future when doing code refactors. Hopefully, one that can monetise itself effectively and remain operational.&lt;/p&gt;
+&lt;p&gt;So what does this mean for the future of OSS? It should serve as a warning. Not all projects are killing it, and some maintenance teams may have a heavier dependency on those projects than others. We all need to eat. Skilled software engineers are in demand — not those who simply “vibe code”, but the actual ones who nowadays leverage AI to make their code better and tackle their workload efficiently.&lt;/p&gt;
+&lt;p&gt;OSS will continue to be as it was. In the event that a maintainer of a major project is unable to continue, the project either finds another one or it stops being supported. It&amp;rsquo;s happened before, and it will happen again. A recent example of this is the &lt;a class="link" href="https://kubernetes.io/blog/2025/11/11/ingress-nginx-retirement/" target="_blank" rel="noopener"
+&gt;Ingress NGINX&lt;/a&gt; project. As the saying goes for the World of Warcraft geeks — No king rules forever.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Cover image by &lt;a class="link" href="https://artlist.io/" target="_blank" rel="noopener"
+&gt;Artlist.io&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;</description></item><item><title>Designing Egress in AWS</title><link>https://powershellpat.github.io/p/designing-egress-in-aws/</link><pubDate>Tue, 08 Jul 2025 22:00:32 +1000</pubDate><guid>https://powershellpat.github.io/p/designing-egress-in-aws/</guid><description>&lt;img src="https://powershellpat.github.io/" alt="Featured image of post Designing Egress in AWS" /&gt;&lt;h2 id="introduction"&gt;Introduction
+&lt;/h2&gt;&lt;p&gt;AWS networking is fairly straightforward in a small setup. As a singular environment, you will generally have a single VPC that consists of:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Subnets&lt;/li&gt;
+&lt;li&gt;Route tables&lt;/li&gt;
+&lt;li&gt;Network ACLs (NACLs)&lt;/li&gt;
+&lt;li&gt;Security groups&lt;/li&gt;
+&lt;li&gt;An Internet Gateway (IGW)&lt;/li&gt;
+&lt;li&gt;NAT Gateway(s)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There are other components, and even some of the ones mentioned here may not be required. You might have a single subnet for all of your resources. Likewise, a NAT Gateway may not even be necessary (this is rare — and anyone exposing private workloads to the internet unnecessarily is not following best practice).&lt;/p&gt;
+&lt;p&gt;But what about in more sophisticated setups, where you have multiple isolated networks in the form of several VPCs across different AWS accounts? You may need to introduce a shared services layer — an isolated VPC (or multiple, depending on your use case) that houses applications used to support your environment. Rather than duplicating these components inside each VPC, we share them (hence the name). To share these components, the VPCs need to be interconnected. AWS provides a service called Transit Gateway (TGW) to achieve exactly that, at scale.&lt;/p&gt;
+&lt;p&gt;Building on the shared services concept, NAT Gateways provide a solution that allows private subnets to connect to the internet for outbound (egress) traffic. They are deployed into public subnets (with a default route to an IGW) so that resources can route through the NAT Gateway to access the internet. NAT Gateways aren’t strictly bound to the VPC they are deployed in — you can use them across different VPCs if you choose, by leveraging a TGW.&lt;/p&gt;
+&lt;p&gt;With all of this context in mind, at what point does it make sense to use a NAT Gateway in each VPC (decentralised egress) versus using a TGW to route all internet traffic through a single VPC and set of NAT Gateways (centralised egress)? Which option is more cost-effective? Let’s find out.&lt;/p&gt;
+&lt;h2 id="architecture-centralised-vs-decentralised"&gt;Architecture: Centralised vs decentralised
+&lt;/h2&gt;&lt;p&gt;Let’s begin by outlining each of the solutions and what they look like architecturally.&lt;/p&gt;
+&lt;h3 id="centralised"&gt;Centralised
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;VPC count:&lt;/strong&gt; 4
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Workload VPCs:&lt;/strong&gt; 3&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Egress VPC:&lt;/strong&gt; 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Transit Gateway count:&lt;/strong&gt; 1
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Transit Gateway attachments:&lt;/strong&gt; 4&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Transit Gateway route tables:&lt;/strong&gt; 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NAT Gateway count:&lt;/strong&gt; 2 (both deployed into the Egress VPC)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Each VPC will be associated with a single Transit Gateway (TGW) route table and propagate its routes accordingly. A default route will be configured to point to the egress VPC, enabling a centralised egress pattern.&lt;/p&gt;
+&lt;p&gt;Each VPC will be created in a separate AWS account, except for the egress VPC, which (along with the TGW) will reside in a dedicated networking account. The TGW will be shared via AWS Resource Access Manager (RAM) to each respective AWS account, allowing TGW attachments to be created for each VPC.&lt;/p&gt;
+&lt;p&gt;This is what the architecture looks like:
 &lt;img src="https://powershellpat.github.io/p/designing-egress-in-aws/centralised.png"
 width="697"
 height="1125"
-srcset="https://powershellpat.github.io/p/designing-egress-in-aws/centralised_hu_bace38ffe9a8c27a.png 480w, https://powershellpat.github.io/p/designing-egress-in-aws/centralised_hu_505e5e3f9f33c811.png 1024w"
+srcset="https://powershellpat.github.io/p/designing-egress-in-aws/centralised_hu_2c2bb8791c1f4371.png 480w, https://powershellpat.github.io/p/designing-egress-in-aws/centralised_hu_9ae02f94909ab1b1.png 1024w"
 loading="lazy"
 alt="Centralised solution"
 class="gallery-image"
 data-flex-grow="61"
 data-flex-basis="148px"
->&lt;/p>
-&lt;h3 id="decentralised">Decentralised
-&lt;/h3>&lt;ul>
-&lt;li>&lt;strong>VPC count:&lt;/strong> 3 (Workload VPCs only)&lt;/li>
-&lt;li>&lt;strong>Transit Gateway count:&lt;/strong> 1
-&lt;ul>
-&lt;li>&lt;strong>Transit Gateway attachments:&lt;/strong> 3&lt;/li>
-&lt;li>&lt;strong>Transit Gateway route tables:&lt;/strong> 1&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;strong>NAT Gateway count:&lt;/strong> 6 (2 in each workload VPC)&lt;/li>
-&lt;/ul>
-&lt;p>Each VPC will be associated with a single TGW route table and will propagate its routes accordingly. This route table will &lt;strong>not&lt;/strong> contain a default route, as traffic will exit locally via each VPCs NAT Gateways before reaching the TGW.&lt;/p>
-&lt;p>Each VPC will be created in separate AWS accounts. The TGW will again be created in the networking account and RAM shared to each AWS account to allow for TGW attachments per VPC.&lt;/p>
-&lt;p>This is what the architecture looks like:
+&gt;&lt;/p&gt;
+&lt;h3 id="decentralised"&gt;Decentralised
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;VPC count:&lt;/strong&gt; 3 (Workload VPCs only)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Transit Gateway count:&lt;/strong&gt; 1
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Transit Gateway attachments:&lt;/strong&gt; 3&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Transit Gateway route tables:&lt;/strong&gt; 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NAT Gateway count:&lt;/strong&gt; 6 (2 in each workload VPC)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Each VPC will be associated with a single TGW route table and will propagate its routes accordingly. This route table will &lt;strong&gt;not&lt;/strong&gt; contain a default route, as traffic will exit locally via each VPCs NAT Gateways before reaching the TGW.&lt;/p&gt;
+&lt;p&gt;Each VPC will be created in separate AWS accounts. The TGW will again be created in the networking account and RAM shared to each AWS account to allow for TGW attachments per VPC.&lt;/p&gt;
+&lt;p&gt;This is what the architecture looks like:
 &lt;img src="https://powershellpat.github.io/p/designing-egress-in-aws/decentralised.png"
 width="701"
 height="1035"
-srcset="https://powershellpat.github.io/p/designing-egress-in-aws/decentralised_hu_d0d8ba7e79e8c972.png 480w, https://powershellpat.github.io/p/designing-egress-in-aws/decentralised_hu_8cfe4ff35c53ecea.png 1024w"
+srcset="https://powershellpat.github.io/p/designing-egress-in-aws/decentralised_hu_90043dbfbe233508.png 480w, https://powershellpat.github.io/p/designing-egress-in-aws/decentralised_hu_4087db33164ab5e6.png 1024w"
 loading="lazy"
 alt="Decentralised solution"
 class="gallery-image"
 data-flex-grow="67"
 data-flex-basis="162px"
->&lt;/p>
-&lt;p>Now that the architectures are defined, let’s dig deeper into the pricing of each component.&lt;/p>
-&lt;h2 id="pricing-models">Pricing models
-&lt;/h2>&lt;h3 id="nat-gateways">NAT Gateways
-&lt;/h3>&lt;p>NAT Gateways have a simple pricing model. You pay for two main things:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>Hourly cost per NAT Gateway&lt;/strong>&lt;/li>
-&lt;li>&lt;strong>Data processed (in GB) by the NAT Gateway&lt;/strong>&lt;/li>
-&lt;/ul>
-&lt;p>The source or destination of the traffic is irrelevant — if the data passes through the NAT Gateway, you&amp;rsquo;re paying for it.&lt;/p>
-&lt;p>In addition to NAT Gateway costs, there are data transfer fees for services like EC2. This includes:&lt;/p>
-&lt;ul>
-&lt;li>Traffic going out to the internet&lt;/li>
-&lt;li>Traffic sent to other AWS regions&lt;/li>
-&lt;li>Traffic sent between Availability Zones (AZs) within the same region&lt;/li>
-&lt;/ul>
-&lt;p>It’s also worth mentioning that &lt;strong>VPCs themselves are free&lt;/strong>. While components inside a VPC (like NAT Gateways) may incur costs, the VPC construct has no cost on its own. So for this comparison, we’ll only factor in the pricing for NAT Gateways.&lt;/p>
-&lt;h3 id="transit-gateways">Transit Gateways
-&lt;/h3>&lt;p>Transit Gateways follow a similar pricing model to NAT Gateways. You pay for:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>Hourly cost per Transit Gateway attachment&lt;/strong>&lt;/li>
-&lt;li>&lt;strong>Data processed (in GB) by the Transit Gateway&lt;/strong>&lt;/li>
-&lt;/ul>
-&lt;p>As with NAT Gateways, data transfer fees for services like EC2 still apply and should be considered — especially for inter-AZ or inter-region traffic.&lt;/p>
-&lt;h2 id="cost-breakdown">Cost breakdown
-&lt;/h2>&lt;p>To calculate actual costs, we need to use the pricing from an AWS region. For this exercise, we’ll use the &lt;strong>AWS Sydney region&lt;/strong> (&lt;code>ap-southeast-2&lt;/code>). Based on this region, the pricing is as follows:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>NAT Gateway&lt;/strong>
-&lt;ul>
-&lt;li>&lt;strong>Hourly fee:&lt;/strong> $0.059&lt;/li>
-&lt;li>&lt;strong>Per GB of data processed:&lt;/strong> $0.059&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;strong>Transit Gateway:&lt;/strong>
-&lt;ul>
-&lt;li>&lt;strong>Hourly fee (per attachment):&lt;/strong> $0.07&lt;/li>
-&lt;li>&lt;strong>Per GB of data processed:&lt;/strong> $0.02&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>For both the centralised and decentralised solutions already outlined, we’ll assume &lt;strong>100 GB of data processed&lt;/strong> in total. We’ll also assume a billing duration of &lt;strong>30 days (720 hours)&lt;/strong> for the hourly costs.&lt;/p>
-&lt;p>Although both solutions will incur data transfer fees (e.g. to the internet, to other AWS regions, or between AZs within a region), these are identical in both cases. As such, we’ve &lt;strong>excluded&lt;/strong> them from this comparison to focus only on the NAT and Transit Gateway pricing.&lt;/p>
-&lt;h3 id="centralised-cost-breakdown">Centralised cost breakdown
-&lt;/h3>&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>Component&lt;/th>
-&lt;th>Cost&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>NAT Gateway 1 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway 2 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway (data processing)&lt;/td>
-&lt;td>$5.90&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (Egress VPC attachment)&lt;/td>
-&lt;td>$50.40&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (Workload A VPC attachment)&lt;/td>
-&lt;td>$50.40&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (Workload B VPC attachment)&lt;/td>
-&lt;td>$50.40&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (Workload C VPC attachment)&lt;/td>
-&lt;td>$50.40&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (data processing)&lt;/td>
-&lt;td>$2&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>&lt;strong>Total&lt;/strong>&lt;/td>
-&lt;td>&lt;strong>$294.46&lt;/strong>&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;h3 id="decentralised-cost-breakdown">Decentralised cost breakdown
-&lt;/h3>&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>Component&lt;/th>
-&lt;th>Cost&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>NAT Gateway 1 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway 2 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway 3 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway 4 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway 5 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway 6 (hourly fee)&lt;/td>
-&lt;td>$42.48&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>NAT Gateway (data processing)&lt;/td>
-&lt;td>$5.90&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (Workload A VPC attachment)&lt;/td>
-&lt;td>$50.40&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (Workload B VPC attachment)&lt;/td>
-&lt;td>$50.40&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (Workload C VPC attachment)&lt;/td>
-&lt;td>$50.40&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Transit Gateway (data processing)&lt;/td>
-&lt;td>$2&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>&lt;strong>Total&lt;/strong>&lt;/td>
-&lt;td>&lt;strong>$413.98&lt;/strong>&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;h2 id="findings">Findings
-&lt;/h2>&lt;p>With the findings in tow, it&amp;rsquo;s clear which solution is more cost-effective based on the defined setup. The &lt;strong>centralised egress solution&lt;/strong> comes out ahead in terms of cost when compared to the decentralised one — &lt;strong>as long as the assumptions hold.&lt;/strong>&lt;/p>
-&lt;p>However, there are edge cases worth exploring. Also, note that we used a &amp;ldquo;magic number&amp;rdquo; of &lt;strong>6 NAT Gateways&lt;/strong> in the decentralised setup — something we’ll expand on shortly.&lt;/p>
-&lt;h3 id="what-if-fewer-vpcs-needed-egress">What if fewer VPCs needed egress?
-&lt;/h3>&lt;p>Suppose only &lt;strong>one of the three workload VPCs&lt;/strong> in the decentralised solution actually required egress access (and therefore NAT Gateways). If you removed &lt;strong>4 of the 6&lt;/strong> NAT Gateways, your total would drop to &lt;strong>$244.06 — cheaper than the centralised solution.&lt;/strong>&lt;/p>
-&lt;h3 id="what-if-you-removed-the-transit-gateway">What If You Removed the Transit Gateway?
-&lt;/h3>&lt;p>Now imagine removing the Transit Gateway from the decentralised solution entirely, and each of the &lt;strong>three VPCs&lt;/strong> had their own &lt;strong>local NAT Gateways&lt;/strong>, but no interconnection. In that case, the total cost would come to &lt;strong>$260.78&lt;/strong> — not as low as the previous example, but &lt;strong>still cheaper than the centralised solution&lt;/strong> (at $294.46).&lt;/p>
-&lt;h3 id="why-we-used-3-vpcs-as-a-baseline">Why We Used 3 VPCs as a Baseline
-&lt;/h3>&lt;p>The reason we compared &lt;strong>three workload VPCs&lt;/strong> and &lt;strong>6 NAT Gateways&lt;/strong> is that this configuration represents a cost-efficiency threshold. Beyond this point, the &lt;strong>decentralised approach starts to suffer from diminishing returns.&lt;/strong>&lt;/p>
-&lt;p>While it may seem obvious to adopt a centralised solution, there&amp;rsquo;s a case to be made for starting with decentralised egress — especially in &lt;strong>early-stage AWS environments&lt;/strong> that aren’t yet interconnected. If the VPCs remain isolated, decentralised egress might be more cost-effective. But &lt;strong>as soon as inter-VPC connectivity is required&lt;/strong>, the decentralised model becomes significantly less economical.&lt;/p>
-&lt;h3 id="additional-cost-scenarios">Additional cost scenarios
-&lt;/h3>&lt;p>Here are some expanded scenarios to help illustrate the cost impact at scale:&lt;/p>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>Scenario&lt;/th>
-&lt;th>Total Cost&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>Decentralised: 4 VPCs, 8 NAT Gateways, 0 TGW&lt;/td>
-&lt;td>$345.74&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Centralised: 4 VPCs + 1 egress VPC, 2 NAT Gateways, 5 TGW attachments&lt;/td>
-&lt;td>$344.86&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Decentralised: 5 VPCs, 10 NAT Gateways, 0 TGW&lt;/td>
-&lt;td>$430.70&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>Centralised: 5 VPCs + 1 egress VPC, 2 NAT Gateways, 6 TGW attachments&lt;/td>
-&lt;td>$395.26&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;p>As shown above, once you pass three VPCs, the centralised model quickly becomes more attractive from a cost perspective.&lt;/p>
-&lt;h2 id="centralised-solution-benefits">Centralised solution benefits
-&lt;/h2>&lt;p>While the primary focus of this blog is cost, not everything comes down to price. Ultimately, the real question is: &lt;strong>what are you willing to pay for best practice and a secure, scalable setup?&lt;/strong>&lt;/p>
-&lt;p>AWS provides several services that enhance security at the networking layer. Two key examples include:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>AWS Network Firewall&lt;/strong> – a fully managed stateful firewall service&lt;/li>
-&lt;li>&lt;strong>Gateway Load Balancer (GWLB)&lt;/strong> – supports third-party firewalls in a “bump-in-the-wire” architecture&lt;/li>
-&lt;/ul>
-&lt;p>Both of these services are designed to operate in a centralised model, enabling consistent inspection of traffic — whether it&amp;rsquo;s north/south (in and out of the AWS network) or east/west (between VPCs/subnets). Any traffic that bypasses these centralised inspection points risks being unauthorised or even malicious. Without a centralised architecture, enforcing an inspection solution across multiple VPCs becomes near impossible.&lt;/p>
-&lt;p>If you needed any more reasons to lean toward a centralised model — regardless of cost — the ability to integrate services like AWS Network Firewall and Gateway Load Balancer should be near the top of the list.&lt;/p>
-&lt;h2 id="conclusion">Conclusion
-&lt;/h2>&lt;p>Egress traffic in AWS must traverse some kind of gateway to reach the internet. For private subnets, this means using a &lt;strong>NAT Gateway&lt;/strong>. As we’ve explored, NAT Gateways can either be &lt;strong>local to each VPC&lt;/strong> or located in a &lt;strong>centralised egress VPC&lt;/strong>, connected via a &lt;strong>Transit Gateway.&lt;/strong>&lt;/p>
-&lt;p>Centralised solutions work best at scale and offer stronger alignment with AWS’s security services. Decentralised solutions, on the other hand, are often more suitable for &lt;strong>smaller environments&lt;/strong> — either early in their cloud journey or intentionally minimal in scope.&lt;/p>
-&lt;p>The next time you&amp;rsquo;re designing how traffic should leave your AWS environment, consider the &lt;strong>long-term direction, cost implications, security posture&lt;/strong>, and — most importantly — &lt;strong>what the environment needs to function effectively.&lt;/strong>&lt;/p>
-&lt;p>Cover image generated by &lt;a class="link" href="https://deepai.org/" target="_blank" rel="noopener"
->DeepAI&lt;/a>&lt;/p></description></item><item><title>Perfect vs Practical: How to know when an IT Solution is ready</title><link>https://powershellpat.github.io/p/perfect-vs-practical-how-to-know-when-an-it-solution-is-ready/</link><pubDate>Thu, 12 Jun 2025 22:20:32 +1000</pubDate><guid>https://powershellpat.github.io/p/perfect-vs-practical-how-to-know-when-an-it-solution-is-ready/</guid><description>&lt;img src="https://images.unsplash.com/photo-1624961151169-b3df5c0f06ab?q=80&amp;w=882&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Featured image of post Perfect vs Practical: How to know when an IT Solution is ready" />&lt;h2 id="introduction">Introduction
-&lt;/h2>&lt;p>Designing IT solutions is a challenging task. Not only do you need to take several factors into consideration, but you also need to understand the lifecycle of what you’re designing. Questions will inevitably pop into your head, like:&lt;/p>
-&lt;ul>
-&lt;li>How long does this solution need to last?&lt;/li>
-&lt;li>Is it going to be perpetual?&lt;/li>
-&lt;li>How do we handle high availability and disaster recovery?&lt;/li>
-&lt;li>When will I know it&amp;rsquo;s complete?&lt;/li>
-&lt;/ul>
-&lt;p>That last point—&lt;em>when will I know it&amp;rsquo;s complete?&lt;/em>—can be ambiguous. Does it mean the solution is fully fleshed out and working at the desired end state? Or does it mean it&amp;rsquo;s ready once a Minimum Viable Product (MVP) has been constructed?&lt;/p>
-&lt;p>If the solution is too simple, it may lack features or fail to scale. But if it’s too complex—over-engineered—it might introduce unexpected bugs and hurt not just our credibility, but also the brand we represent, especially in a corporate context. And beyond the bugs, what about the cost of building that solution? Our time? Money? Resources? All potentially wasted on something that doesn’t deliver a meaningful return on investment.&lt;/p>
-&lt;p>It’s a conundrum, no doubt. But there are frameworks and considerations that help you draw the line and confidently mark a solution as done based on criteria.&lt;/p>
-&lt;h2 id="understanding-a-solution">Understanding a solution
-&lt;/h2>&lt;p>One of the first fundamental skills that you need to understand as a Consultant or anyone in a role that involves designing or architecting solutions—is the ability to understand the &lt;strong>what&lt;/strong> and the &lt;strong>why&lt;/strong>:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>What&lt;/strong> are we doing?&lt;/li>
-&lt;li>&lt;strong>What&lt;/strong> are we building?&lt;/li>
-&lt;li>&lt;strong>What&lt;/strong> is it?&lt;/li>
-&lt;li>&lt;strong>What&lt;/strong> will it be?&lt;/li>
-&lt;/ul>
-&lt;p>Once we understand that &lt;strong>what&lt;/strong>, we move on to the &lt;strong>why&lt;/strong>:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>Why&lt;/strong> are we doing this?&lt;/li>
-&lt;li>&lt;strong>Why&lt;/strong> are we building this?&lt;/li>
-&lt;li>&lt;strong>Why&lt;/strong> do we need to include x, y and z?&lt;/li>
-&lt;li>&lt;strong>Why&lt;/strong> is this or that a good idea?&lt;/li>
-&lt;/ul>
-&lt;p>All of those &lt;em>what&lt;/em> and &lt;em>why&lt;/em> questions can be summarised in a single word: requirements. Requirements are the driving force behind the rationale. They help shape what the solution will look like and give context to the decisions made along the way. They set the direction—establishing goals, coordinating efforts across teams, and managing expectations for stakeholders. From a commercial perspective, requirements are assessed and translated into elements such as &lt;strong>definition of done&lt;/strong> and/or &lt;strong>acceptance criteria&lt;/strong>. These elements are then used in commercial agreements like a &lt;strong>Statement of Work (SoW)&lt;/strong> to provide clear and concise deliverables for all parties involved.&lt;/p>
-&lt;p>When we understand the requirements of what we’re setting out to do, we have structure. That structure becomes the foundation for a plan—where ideas take shape and strategy begins to form. As you become more proficient in your craft—whether it’s software, infrastructure, or something else—you’ll begin to recognise patterns. You’ll recall what worked well and what didn’t in previous experiences. Armed with that insight, you’ll feel more confident when similar situations arise, and better equipped to act early—before issues have a chance to fester.&lt;/p>
-&lt;h2 id="the-definition-of-complete">The definition of complete
-&lt;/h2>&lt;p>Now comes the tricky part of this process: &lt;em>What defines a solution as complete?&lt;/em>&lt;/p>
-&lt;ul>
-&lt;li>Is it something that we can measure?&lt;/li>
-&lt;li>Does it relate to its run cost?&lt;/li>
-&lt;li>Can it handle the load we need it to?&lt;/li>
-&lt;li>Will it accumulate technical debt?&lt;/li>
-&lt;/ul>
-&lt;p>We do have frameworks and tools to help answer these questions. In the previous section on understanding a solution, we mentioned the &lt;strong>definition of done&lt;/strong> and &lt;strong>acceptance criteria&lt;/strong>. Depending on how mature the environment and organisation are, these could be loosely defined or meticulously detailed. By using these elements, we can clearly describe what a “complete” solution looks like—aligned with what we’re trying to achieve &lt;strong>now&lt;/strong>.&lt;/p>
-&lt;p>Even though we use the term “complete”, it doesn’t always mean the end state. More often, it marks a meaningful checkpoint. The future state will continue to evolve—just as the broader IT landscape constantly shifts.&lt;/p>
-&lt;p>A definition of done may reflect a &lt;strong>simple&lt;/strong>, even traditional, solution. Solutions don’t need to be extravagant if they fulfill the basic requirements. There’s nothing wrong with doing things the old-fashioned way. Take mainframes, for example. You might think of them as legacy tech from the 1960s—but would it surprise you to know that many major corporations across sectors like finance, government, and healthcare still rely on mainframes today to process transactions? Mainframes continue to hold relevance because of their unique capabilities and the critical roles they play in these industries. Could they be replaced by modern stacks like serverless architectures? Probably. Is it a simple task? Absolutely not.&lt;/p>
-&lt;p>The mainframe example highlights two key principles:&lt;/p>
-&lt;ol>
-&lt;li>&lt;strong>If it isn’t broken, don’t fix it&lt;/strong> — or in other words, if it works, don’t change it.&lt;/li>
-&lt;li>&lt;strong>Old technology doesn’t automatically mean obsolete&lt;/strong> — in fact, as older generations retire, we might even see a kind of renaissance for legacy technologies like mainframes.&lt;/li>
-&lt;/ol>
-&lt;p>At one point in history, mainframes were considered the north star of computing. Fast forward to today, and our modern-day north stars might be serverless platforms that run only your code—or perhaps AI-powered observability systems that proactively detect anomalies.&lt;/p>
-&lt;p>Technology doesn’t stand still. It evolves rapidly. Today, we’re seeing explosive growth in AI, particularly with agentic models that leverage Model Context Protocol (MCP) servers.&lt;/p>
-&lt;p>So when it comes to defining what makes a solution &amp;ldquo;complete,&amp;rdquo; remember these quick tidbits:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>It’s fit for purpose.&lt;/strong> It doesn’t need to last forever—just for today, tomorrow, and the near future. Solutions will always evolve.&lt;/li>
-&lt;li>&lt;strong>It will scale within reason.&lt;/strong> If you’re expecting millions of requests per second, architect accordingly. But if you&amp;rsquo;re only handling a few per second, you don’t need a massive data platform with all the bells and whistles that might cost thousands per month to run.&lt;/li>
-&lt;li>&lt;strong>It will work.&lt;/strong> This is the core of it all. “Working” might mean different things to different people, but ultimately, the solution behaves as intended and delivers on its purpose.&lt;/li>
-&lt;/ul>
-&lt;h2 id="over-engineering-and-its-ramifications">Over-engineering and its ramifications
-&lt;/h2>&lt;p>So what happens when we go to the other extreme? Rather than stopping at our definition of done, we push way past it and engineer the hell out of a solution. It’s amazing! It’s something to behold!&lt;/p>
-&lt;p>…Or is it?&lt;/p>
-&lt;p>How far down the rabbit hole did you have to go to get there?
-And ultimately—what was the cost?&lt;/p>
-&lt;p>Over-engineering is contextual. When it does happen, it can manifest in different forms depending on the solution. One of the worst forms is trying to account for every possible future use case—a “just in case” mindset. Building a solution to handle everything that &lt;em>might&lt;/em> happen in the future can stifle progress. It can halt or delay the project until there is mutual resolution amongst stakeholders, all while delaying progress to the end goal. In situations like this, I often use the saying: &lt;strong>“the juice isn’t worth the squeeze.”&lt;/strong> In other words, to achieve &lt;em>X&lt;/em>, we need to do &lt;em>Y&lt;/em>—and &lt;em>Y&lt;/em> just isn’t worth the investment of our time, resources, or mental energy.&lt;/p>
-&lt;p>Another form of over-engineering is adding unnecessary complexity. The &lt;strong>maturity&lt;/strong> of a solution must be factored in when architecting. Introducing advanced complexity to a system that’s not ready for it can be wasteful, or even damaging. Take a startup, for example. Let’s say their core revenue-driving product is a piece of software. Right now, that software runs on a single PC under someone’s desk. Is it elegant? No. Does it work for &lt;em>now&lt;/em>? Actually, yes—in a very non-ideal way.&lt;/p>
-&lt;p>If that same startup tries to launch into a cutting-edge, serverless cloud architecture with auto-scaling, CI/CD pipelines, and bleeding-edge automation—&lt;strong>but has no current need for it&lt;/strong>—that effort would be a catastrophe. The resources required to build and support such a setup would likely never see a return, especially if the startup is still finding product-market fit or struggling with cash flow. In fact, they might run out of steam entirely and fold before realising their goals.&lt;/p>
-&lt;p>A solution shouldn’t be &lt;strong>too top-heavy&lt;/strong> at the start. By that, I mean: don’t add features or components that don’t bring actual value in the near term. Later—once things stabilize and there’s a clear path forward—it might make sense to revisit and layer in those “nice to have” features. But early on, they often just weigh you down.&lt;/p>
-&lt;h2 id="return-on-investment-roi-and-building-momentum">Return on Investment (ROI) and building momentum
-&lt;/h2>&lt;p>After we get through the rigorous process of vetting the solution using the mechanisms already mentioned, we need to shift into a mindset that focuses on &lt;strong>vision&lt;/strong>—the long-term outlook for the solution. As part of this vision, we must consider how we extract value over time and achieve a solid return on investment (ROI). But ROI isn’t always about money. There are other forms of currency we “spend” to make a solution functional and successful. These include:&lt;/p>
-&lt;ul>
-&lt;li>Time&lt;/li>
-&lt;li>Effort&lt;/li>
-&lt;li>On-going support&lt;/li>
-&lt;li>Business integration&lt;/li>
-&lt;/ul>
-&lt;p>Let’s start with &lt;strong>time&lt;/strong>. It’s one of our most precious resources—yet most of us (myself included) never seem to have enough of it. In the digital age, it’s easy to jump from watching Judge Judy on YouTube to checking sports results, reading the latest tariff news, playing a video game, or falling into a social media rabbit hole. There’s always something waiting to eat into our time.&lt;/p>
-&lt;p>So, when we invest time into a solution, it should give us time back. The return should come in the form of &lt;strong>efficiency&lt;/strong> or &lt;strong>automation&lt;/strong>. This is especially true when adopting DevOps methodologies, where the whole premise is to automate as much of your role as possible—freeing you up for higher-value tasks.&lt;/p>
-&lt;p>Another often-overlooked factor is the &lt;strong>longevity of the solution&lt;/strong> and what ongoing support and maintenance will look like. Simple systems might be seen as ancient by today’s standards—but they can also be the easiest to maintain, debug, and enhance. A “good enough” solution &lt;em>today&lt;/em> often beats a “perfect” one six months from now.&lt;/p>
-&lt;p>A solution that is well-vetted, tested, iterated upon, intuitive, and clearly defined delivers strong ROI—not just for development teams, but also for project managers, business stakeholders, and end users. When more people begin interacting with the solution, momentum builds. Feedback loops form, giving valuable insight into what to improve or prioritise next.&lt;/p>
-&lt;p>This is how momentum turns into progress.
-This is how “good enough” evolves into &lt;strong>great&lt;/strong>.&lt;/p>
-&lt;h2 id="conclusion">Conclusion
-&lt;/h2>&lt;p>The next time you&amp;rsquo;re designing a solution—or playing a role in shaping one—consider what’s &lt;strong>practical&lt;/strong> to get it working now, versus what’s &lt;strong>“perfect”&lt;/strong> but loaded with nice-to-have features that may not add much value.&lt;/p>
-&lt;p>Don’t get stuck in the weeds and chase those rabbits too deep into those holes! While it can be fun to experiment and theory-craft, a good engineer or architect knows when they&amp;rsquo;ve gone deep enough to achieve a solid result for a reasonable amount of effort.
-In the end, completing a solution up until a point isn’t settling. It&amp;rsquo;s being strategic.&lt;/p>
-&lt;p>&lt;em>Cover image by &lt;a class="link" href="https://unsplash.com/@lucasdixsept" target="_blank" rel="noopener"
->dix sept&lt;/a> on Unsplash&lt;/em>&lt;/p></description></item></channel></rss>
+&gt;&lt;/p&gt;
+&lt;p&gt;Now that the architectures are defined, let’s dig deeper into the pricing of each component.&lt;/p&gt;
+&lt;h2 id="pricing-models"&gt;Pricing models
+&lt;/h2&gt;&lt;h3 id="nat-gateways"&gt;NAT Gateways
+&lt;/h3&gt;&lt;p&gt;NAT Gateways have a simple pricing model. You pay for two main things:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Hourly cost per NAT Gateway&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Data processed (in GB) by the NAT Gateway&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The source or destination of the traffic is irrelevant — if the data passes through the NAT Gateway, you&amp;rsquo;re paying for it.&lt;/p&gt;
+&lt;p&gt;In addition to NAT Gateway costs, there are data transfer fees for services like EC2. This includes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Traffic going out to the internet&lt;/li&gt;
+&lt;li&gt;Traffic sent to other AWS regions&lt;/li&gt;
+&lt;li&gt;Traffic sent between Availability Zones (AZs) within the same region&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;It’s also worth mentioning that &lt;strong&gt;VPCs themselves are free&lt;/strong&gt;. While components inside a VPC (like NAT Gateways) may incur costs, the VPC construct has no cost on its own. So for this comparison, we’ll only factor in the pricing for NAT Gateways.&lt;/p&gt;
+&lt;h3 id="transit-gateways"&gt;Transit Gateways
+&lt;/h3&gt;&lt;p&gt;Transit Gateways follow a similar pricing model to NAT Gateways. You pay for:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Hourly cost per Transit Gateway attachment&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Data processed (in GB) by the Transit Gateway&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;As with NAT Gateways, data transfer fees for services like EC2 still apply and should be considered — especially for inter-AZ or inter-region traffic.&lt;/p&gt;
+&lt;h2 id="cost-breakdown"&gt;Cost breakdown
+&lt;/h2&gt;&lt;p&gt;To calculate actual costs, we need to use the pricing from an AWS region. For this exercise, we’ll use the &lt;strong&gt;AWS Sydney region&lt;/strong&gt; (&lt;code&gt;ap-southeast-2&lt;/code&gt;). Based on this region, the pricing is as follows:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;NAT Gateway&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Hourly fee:&lt;/strong&gt; $0.059&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Per GB of data processed:&lt;/strong&gt; $0.059&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Transit Gateway:&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Hourly fee (per attachment):&lt;/strong&gt; $0.07&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Per GB of data processed:&lt;/strong&gt; $0.02&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For both the centralised and decentralised solutions already outlined, we’ll assume &lt;strong&gt;100 GB of data processed&lt;/strong&gt; in total. We’ll also assume a billing duration of &lt;strong&gt;30 days (720 hours)&lt;/strong&gt; for the hourly costs.&lt;/p&gt;
+&lt;p&gt;Although both solutions will incur data transfer fees (e.g. to the internet, to other AWS regions, or between AZs within a region), these are identical in both cases. As such, we’ve &lt;strong&gt;excluded&lt;/strong&gt; them from this comparison to focus only on the NAT and Transit Gateway pricing.&lt;/p&gt;
+&lt;h3 id="centralised-cost-breakdown"&gt;Centralised cost breakdown
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Component&lt;/th&gt;
+&lt;th&gt;Cost&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 1 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 2 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway (data processing)&lt;/td&gt;
+&lt;td&gt;$5.90&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (Egress VPC attachment)&lt;/td&gt;
+&lt;td&gt;$50.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (Workload A VPC attachment)&lt;/td&gt;
+&lt;td&gt;$50.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (Workload B VPC attachment)&lt;/td&gt;
+&lt;td&gt;$50.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (Workload C VPC attachment)&lt;/td&gt;
+&lt;td&gt;$50.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (data processing)&lt;/td&gt;
+&lt;td&gt;$2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Total&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;$294.46&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="decentralised-cost-breakdown"&gt;Decentralised cost breakdown
+&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Component&lt;/th&gt;
+&lt;th&gt;Cost&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 1 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 2 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 3 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 4 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 5 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway 6 (hourly fee)&lt;/td&gt;
+&lt;td&gt;$42.48&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NAT Gateway (data processing)&lt;/td&gt;
+&lt;td&gt;$5.90&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (Workload A VPC attachment)&lt;/td&gt;
+&lt;td&gt;$50.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (Workload B VPC attachment)&lt;/td&gt;
+&lt;td&gt;$50.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (Workload C VPC attachment)&lt;/td&gt;
+&lt;td&gt;$50.40&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Transit Gateway (data processing)&lt;/td&gt;
+&lt;td&gt;$2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Total&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;$413.98&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="findings"&gt;Findings
+&lt;/h2&gt;&lt;p&gt;With the findings in tow, it&amp;rsquo;s clear which solution is more cost-effective based on the defined setup. The &lt;strong&gt;centralised egress solution&lt;/strong&gt; comes out ahead in terms of cost when compared to the decentralised one — &lt;strong&gt;as long as the assumptions hold.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;However, there are edge cases worth exploring. Also, note that we used a &amp;ldquo;magic number&amp;rdquo; of &lt;strong&gt;6 NAT Gateways&lt;/strong&gt; in the decentralised setup — something we’ll expand on shortly.&lt;/p&gt;
+&lt;h3 id="what-if-fewer-vpcs-needed-egress"&gt;What if fewer VPCs needed egress?
+&lt;/h3&gt;&lt;p&gt;Suppose only &lt;strong&gt;one of the three workload VPCs&lt;/strong&gt; in the decentralised solution actually required egress access (and therefore NAT Gateways). If you removed &lt;strong&gt;4 of the 6&lt;/strong&gt; NAT Gateways, your total would drop to &lt;strong&gt;$244.06 — cheaper than the centralised solution.&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id="what-if-you-removed-the-transit-gateway"&gt;What If You Removed the Transit Gateway?
+&lt;/h3&gt;&lt;p&gt;Now imagine removing the Transit Gateway from the decentralised solution entirely, and each of the &lt;strong&gt;three VPCs&lt;/strong&gt; had their own &lt;strong&gt;local NAT Gateways&lt;/strong&gt;, but no interconnection. In that case, the total cost would come to &lt;strong&gt;$260.78&lt;/strong&gt; — not as low as the previous example, but &lt;strong&gt;still cheaper than the centralised solution&lt;/strong&gt; (at $294.46).&lt;/p&gt;
+&lt;h3 id="why-we-used-3-vpcs-as-a-baseline"&gt;Why We Used 3 VPCs as a Baseline
+&lt;/h3&gt;&lt;p&gt;The reason we compared &lt;strong&gt;three workload VPCs&lt;/strong&gt; and &lt;strong&gt;6 NAT Gateways&lt;/strong&gt; is that this configuration represents a cost-efficiency threshold. Beyond this point, the &lt;strong&gt;decentralised approach starts to suffer from diminishing returns.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;While it may seem obvious to adopt a centralised solution, there&amp;rsquo;s a case to be made for starting with decentralised egress — especially in &lt;strong&gt;early-stage AWS environments&lt;/strong&gt; that aren’t yet interconnected. If the VPCs remain isolated, decentralised egress might be more cost-effective. But &lt;strong&gt;as soon as inter-VPC connectivity is required&lt;/strong&gt;, the decentralised model becomes significantly less economical.&lt;/p&gt;
+&lt;h3 id="additional-cost-scenarios"&gt;Additional cost scenarios
+&lt;/h3&gt;&lt;p&gt;Here are some expanded scenarios to help illustrate the cost impact at scale:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Scenario&lt;/th&gt;
+&lt;th&gt;Total Cost&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Decentralised: 4 VPCs, 8 NAT Gateways, 0 TGW&lt;/td&gt;
+&lt;td&gt;$345.74&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Centralised: 4 VPCs + 1 egress VPC, 2 NAT Gateways, 5 TGW attachments&lt;/td&gt;
+&lt;td&gt;$344.86&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Decentralised: 5 VPCs, 10 NAT Gateways, 0 TGW&lt;/td&gt;
+&lt;td&gt;$430.70&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Centralised: 5 VPCs + 1 egress VPC, 2 NAT Gateways, 6 TGW attachments&lt;/td&gt;
+&lt;td&gt;$395.26&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;As shown above, once you pass three VPCs, the centralised model quickly becomes more attractive from a cost perspective.&lt;/p&gt;
+&lt;h2 id="centralised-solution-benefits"&gt;Centralised solution benefits
+&lt;/h2&gt;&lt;p&gt;While the primary focus of this blog is cost, not everything comes down to price. Ultimately, the real question is: &lt;strong&gt;what are you willing to pay for best practice and a secure, scalable setup?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;AWS provides several services that enhance security at the networking layer. Two key examples include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AWS Network Firewall&lt;/strong&gt; – a fully managed stateful firewall service&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Gateway Load Balancer (GWLB)&lt;/strong&gt; – supports third-party firewalls in a “bump-in-the-wire” architecture&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Both of these services are designed to operate in a centralised model, enabling consistent inspection of traffic — whether it&amp;rsquo;s north/south (in and out of the AWS network) or east/west (between VPCs/subnets). Any traffic that bypasses these centralised inspection points risks being unauthorised or even malicious. Without a centralised architecture, enforcing an inspection solution across multiple VPCs becomes near impossible.&lt;/p&gt;
+&lt;p&gt;If you needed any more reasons to lean toward a centralised model — regardless of cost — the ability to integrate services like AWS Network Firewall and Gateway Load Balancer should be near the top of the list.&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Egress traffic in AWS must traverse some kind of gateway to reach the internet. For private subnets, this means using a &lt;strong&gt;NAT Gateway&lt;/strong&gt;. As we’ve explored, NAT Gateways can either be &lt;strong&gt;local to each VPC&lt;/strong&gt; or located in a &lt;strong&gt;centralised egress VPC&lt;/strong&gt;, connected via a &lt;strong&gt;Transit Gateway.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Centralised solutions work best at scale and offer stronger alignment with AWS’s security services. Decentralised solutions, on the other hand, are often more suitable for &lt;strong&gt;smaller environments&lt;/strong&gt; — either early in their cloud journey or intentionally minimal in scope.&lt;/p&gt;
+&lt;p&gt;The next time you&amp;rsquo;re designing how traffic should leave your AWS environment, consider the &lt;strong&gt;long-term direction, cost implications, security posture&lt;/strong&gt;, and — most importantly — &lt;strong&gt;what the environment needs to function effectively.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Cover image generated by &lt;a class="link" href="https://deepai.org/" target="_blank" rel="noopener"
+&gt;DeepAI&lt;/a&gt;&lt;/p&gt;</description></item><item><title>Perfect vs Practical: How to know when an IT Solution is ready</title><link>https://powershellpat.github.io/p/perfect-vs-practical-how-to-know-when-an-it-solution-is-ready/</link><pubDate>Thu, 12 Jun 2025 22:20:32 +1000</pubDate><guid>https://powershellpat.github.io/p/perfect-vs-practical-how-to-know-when-an-it-solution-is-ready/</guid><description>&lt;img src="https://powershellpat.github.io/" alt="Featured image of post Perfect vs Practical: How to know when an IT Solution is ready" /&gt;&lt;h2 id="introduction"&gt;Introduction
+&lt;/h2&gt;&lt;p&gt;Designing IT solutions is a challenging task. Not only do you need to take several factors into consideration, but you also need to understand the lifecycle of what you’re designing. Questions will inevitably pop into your head, like:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;How long does this solution need to last?&lt;/li&gt;
+&lt;li&gt;Is it going to be perpetual?&lt;/li&gt;
+&lt;li&gt;How do we handle high availability and disaster recovery?&lt;/li&gt;
+&lt;li&gt;When will I know it&amp;rsquo;s complete?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;That last point—&lt;em&gt;when will I know it&amp;rsquo;s complete?&lt;/em&gt;—can be ambiguous. Does it mean the solution is fully fleshed out and working at the desired end state? Or does it mean it&amp;rsquo;s ready once a Minimum Viable Product (MVP) has been constructed?&lt;/p&gt;
+&lt;p&gt;If the solution is too simple, it may lack features or fail to scale. But if it’s too complex—over-engineered—it might introduce unexpected bugs and hurt not just our credibility, but also the brand we represent, especially in a corporate context. And beyond the bugs, what about the cost of building that solution? Our time? Money? Resources? All potentially wasted on something that doesn’t deliver a meaningful return on investment.&lt;/p&gt;
+&lt;p&gt;It’s a conundrum, no doubt. But there are frameworks and considerations that help you draw the line and confidently mark a solution as done based on criteria.&lt;/p&gt;
+&lt;h2 id="understanding-a-solution"&gt;Understanding a solution
+&lt;/h2&gt;&lt;p&gt;One of the first fundamental skills that you need to understand as a Consultant or anyone in a role that involves designing or architecting solutions—is the ability to understand the &lt;strong&gt;what&lt;/strong&gt; and the &lt;strong&gt;why&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;What&lt;/strong&gt; are we doing?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;What&lt;/strong&gt; are we building?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;What&lt;/strong&gt; is it?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;What&lt;/strong&gt; will it be?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Once we understand that &lt;strong&gt;what&lt;/strong&gt;, we move on to the &lt;strong&gt;why&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Why&lt;/strong&gt; are we doing this?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Why&lt;/strong&gt; are we building this?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Why&lt;/strong&gt; do we need to include x, y and z?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Why&lt;/strong&gt; is this or that a good idea?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;All of those &lt;em&gt;what&lt;/em&gt; and &lt;em&gt;why&lt;/em&gt; questions can be summarised in a single word: requirements. Requirements are the driving force behind the rationale. They help shape what the solution will look like and give context to the decisions made along the way. They set the direction—establishing goals, coordinating efforts across teams, and managing expectations for stakeholders. From a commercial perspective, requirements are assessed and translated into elements such as &lt;strong&gt;definition of done&lt;/strong&gt; and/or &lt;strong&gt;acceptance criteria&lt;/strong&gt;. These elements are then used in commercial agreements like a &lt;strong&gt;Statement of Work (SoW)&lt;/strong&gt; to provide clear and concise deliverables for all parties involved.&lt;/p&gt;
+&lt;p&gt;When we understand the requirements of what we’re setting out to do, we have structure. That structure becomes the foundation for a plan—where ideas take shape and strategy begins to form. As you become more proficient in your craft—whether it’s software, infrastructure, or something else—you’ll begin to recognise patterns. You’ll recall what worked well and what didn’t in previous experiences. Armed with that insight, you’ll feel more confident when similar situations arise, and better equipped to act early—before issues have a chance to fester.&lt;/p&gt;
+&lt;h2 id="the-definition-of-complete"&gt;The definition of complete
+&lt;/h2&gt;&lt;p&gt;Now comes the tricky part of this process: &lt;em&gt;What defines a solution as complete?&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Is it something that we can measure?&lt;/li&gt;
+&lt;li&gt;Does it relate to its run cost?&lt;/li&gt;
+&lt;li&gt;Can it handle the load we need it to?&lt;/li&gt;
+&lt;li&gt;Will it accumulate technical debt?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We do have frameworks and tools to help answer these questions. In the previous section on understanding a solution, we mentioned the &lt;strong&gt;definition of done&lt;/strong&gt; and &lt;strong&gt;acceptance criteria&lt;/strong&gt;. Depending on how mature the environment and organisation are, these could be loosely defined or meticulously detailed. By using these elements, we can clearly describe what a “complete” solution looks like—aligned with what we’re trying to achieve &lt;strong&gt;now&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Even though we use the term “complete”, it doesn’t always mean the end state. More often, it marks a meaningful checkpoint. The future state will continue to evolve—just as the broader IT landscape constantly shifts.&lt;/p&gt;
+&lt;p&gt;A definition of done may reflect a &lt;strong&gt;simple&lt;/strong&gt;, even traditional, solution. Solutions don’t need to be extravagant if they fulfill the basic requirements. There’s nothing wrong with doing things the old-fashioned way. Take mainframes, for example. You might think of them as legacy tech from the 1960s—but would it surprise you to know that many major corporations across sectors like finance, government, and healthcare still rely on mainframes today to process transactions? Mainframes continue to hold relevance because of their unique capabilities and the critical roles they play in these industries. Could they be replaced by modern stacks like serverless architectures? Probably. Is it a simple task? Absolutely not.&lt;/p&gt;
+&lt;p&gt;The mainframe example highlights two key principles:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;If it isn’t broken, don’t fix it&lt;/strong&gt; — or in other words, if it works, don’t change it.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Old technology doesn’t automatically mean obsolete&lt;/strong&gt; — in fact, as older generations retire, we might even see a kind of renaissance for legacy technologies like mainframes.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;At one point in history, mainframes were considered the north star of computing. Fast forward to today, and our modern-day north stars might be serverless platforms that run only your code—or perhaps AI-powered observability systems that proactively detect anomalies.&lt;/p&gt;
+&lt;p&gt;Technology doesn’t stand still. It evolves rapidly. Today, we’re seeing explosive growth in AI, particularly with agentic models that leverage Model Context Protocol (MCP) servers.&lt;/p&gt;
+&lt;p&gt;So when it comes to defining what makes a solution &amp;ldquo;complete,&amp;rdquo; remember these quick tidbits:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;It’s fit for purpose.&lt;/strong&gt; It doesn’t need to last forever—just for today, tomorrow, and the near future. Solutions will always evolve.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;It will scale within reason.&lt;/strong&gt; If you’re expecting millions of requests per second, architect accordingly. But if you&amp;rsquo;re only handling a few per second, you don’t need a massive data platform with all the bells and whistles that might cost thousands per month to run.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;It will work.&lt;/strong&gt; This is the core of it all. “Working” might mean different things to different people, but ultimately, the solution behaves as intended and delivers on its purpose.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="over-engineering-and-its-ramifications"&gt;Over-engineering and its ramifications
+&lt;/h2&gt;&lt;p&gt;So what happens when we go to the other extreme? Rather than stopping at our definition of done, we push way past it and engineer the hell out of a solution. It’s amazing! It’s something to behold!&lt;/p&gt;
+&lt;p&gt;…Or is it?&lt;/p&gt;
+&lt;p&gt;How far down the rabbit hole did you have to go to get there?
+And ultimately—what was the cost?&lt;/p&gt;
+&lt;p&gt;Over-engineering is contextual. When it does happen, it can manifest in different forms depending on the solution. One of the worst forms is trying to account for every possible future use case—a “just in case” mindset. Building a solution to handle everything that &lt;em&gt;might&lt;/em&gt; happen in the future can stifle progress. It can halt or delay the project until there is mutual resolution amongst stakeholders, all while delaying progress to the end goal. In situations like this, I often use the saying: &lt;strong&gt;“the juice isn’t worth the squeeze.”&lt;/strong&gt; In other words, to achieve &lt;em&gt;X&lt;/em&gt;, we need to do &lt;em&gt;Y&lt;/em&gt;—and &lt;em&gt;Y&lt;/em&gt; just isn’t worth the investment of our time, resources, or mental energy.&lt;/p&gt;
+&lt;p&gt;Another form of over-engineering is adding unnecessary complexity. The &lt;strong&gt;maturity&lt;/strong&gt; of a solution must be factored in when architecting. Introducing advanced complexity to a system that’s not ready for it can be wasteful, or even damaging. Take a startup, for example. Let’s say their core revenue-driving product is a piece of software. Right now, that software runs on a single PC under someone’s desk. Is it elegant? No. Does it work for &lt;em&gt;now&lt;/em&gt;? Actually, yes—in a very non-ideal way.&lt;/p&gt;
+&lt;p&gt;If that same startup tries to launch into a cutting-edge, serverless cloud architecture with auto-scaling, CI/CD pipelines, and bleeding-edge automation—&lt;strong&gt;but has no current need for it&lt;/strong&gt;—that effort would be a catastrophe. The resources required to build and support such a setup would likely never see a return, especially if the startup is still finding product-market fit or struggling with cash flow. In fact, they might run out of steam entirely and fold before realising their goals.&lt;/p&gt;
+&lt;p&gt;A solution shouldn’t be &lt;strong&gt;too top-heavy&lt;/strong&gt; at the start. By that, I mean: don’t add features or components that don’t bring actual value in the near term. Later—once things stabilize and there’s a clear path forward—it might make sense to revisit and layer in those “nice to have” features. But early on, they often just weigh you down.&lt;/p&gt;
+&lt;h2 id="return-on-investment-roi-and-building-momentum"&gt;Return on Investment (ROI) and building momentum
+&lt;/h2&gt;&lt;p&gt;After we get through the rigorous process of vetting the solution using the mechanisms already mentioned, we need to shift into a mindset that focuses on &lt;strong&gt;vision&lt;/strong&gt;—the long-term outlook for the solution. As part of this vision, we must consider how we extract value over time and achieve a solid return on investment (ROI). But ROI isn’t always about money. There are other forms of currency we “spend” to make a solution functional and successful. These include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Time&lt;/li&gt;
+&lt;li&gt;Effort&lt;/li&gt;
+&lt;li&gt;On-going support&lt;/li&gt;
+&lt;li&gt;Business integration&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Let’s start with &lt;strong&gt;time&lt;/strong&gt;. It’s one of our most precious resources—yet most of us (myself included) never seem to have enough of it. In the digital age, it’s easy to jump from watching Judge Judy on YouTube to checking sports results, reading the latest tariff news, playing a video game, or falling into a social media rabbit hole. There’s always something waiting to eat into our time.&lt;/p&gt;
+&lt;p&gt;So, when we invest time into a solution, it should give us time back. The return should come in the form of &lt;strong&gt;efficiency&lt;/strong&gt; or &lt;strong&gt;automation&lt;/strong&gt;. This is especially true when adopting DevOps methodologies, where the whole premise is to automate as much of your role as possible—freeing you up for higher-value tasks.&lt;/p&gt;
+&lt;p&gt;Another often-overlooked factor is the &lt;strong&gt;longevity of the solution&lt;/strong&gt; and what ongoing support and maintenance will look like. Simple systems might be seen as ancient by today’s standards—but they can also be the easiest to maintain, debug, and enhance. A “good enough” solution &lt;em&gt;today&lt;/em&gt; often beats a “perfect” one six months from now.&lt;/p&gt;
+&lt;p&gt;A solution that is well-vetted, tested, iterated upon, intuitive, and clearly defined delivers strong ROI—not just for development teams, but also for project managers, business stakeholders, and end users. When more people begin interacting with the solution, momentum builds. Feedback loops form, giving valuable insight into what to improve or prioritise next.&lt;/p&gt;
+&lt;p&gt;This is how momentum turns into progress.
+This is how “good enough” evolves into &lt;strong&gt;great&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;The next time you&amp;rsquo;re designing a solution—or playing a role in shaping one—consider what’s &lt;strong&gt;practical&lt;/strong&gt; to get it working now, versus what’s &lt;strong&gt;“perfect”&lt;/strong&gt; but loaded with nice-to-have features that may not add much value.&lt;/p&gt;
+&lt;p&gt;Don’t get stuck in the weeds and chase those rabbits too deep into those holes! While it can be fun to experiment and theory-craft, a good engineer or architect knows when they&amp;rsquo;ve gone deep enough to achieve a solid result for a reasonable amount of effort.
+In the end, completing a solution up until a point isn’t settling. It&amp;rsquo;s being strategic.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Cover image by &lt;a class="link" href="https://unsplash.com/@lucasdixsept" target="_blank" rel="noopener"
+&gt;dix sept&lt;/a&gt; on Unsplash&lt;/em&gt;&lt;/p&gt;</description></item></channel></rss>

@@ -1,81 +1,81 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Solution Completeness on Patrick Contes blog</title><link>https://powershellpat.github.io/tags/solution-completeness/</link><description>Recent content in Solution Completeness on Patrick Contes blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 12 Jun 2025 22:20:32 +1000</lastBuildDate><atom:link href="https://powershellpat.github.io/tags/solution-completeness/index.xml" rel="self" type="application/rss+xml"/><item><title>Perfect vs Practical: How to know when an IT Solution is ready</title><link>https://powershellpat.github.io/p/perfect-vs-practical-how-to-know-when-an-it-solution-is-ready/</link><pubDate>Thu, 12 Jun 2025 22:20:32 +1000</pubDate><guid>https://powershellpat.github.io/p/perfect-vs-practical-how-to-know-when-an-it-solution-is-ready/</guid><description>&lt;img src="https://images.unsplash.com/photo-1624961151169-b3df5c0f06ab?q=80&amp;w=882&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Featured image of post Perfect vs Practical: How to know when an IT Solution is ready" />&lt;h2 id="introduction">Introduction
-&lt;/h2>&lt;p>Designing IT solutions is a challenging task. Not only do you need to take several factors into consideration, but you also need to understand the lifecycle of what you’re designing. Questions will inevitably pop into your head, like:&lt;/p>
-&lt;ul>
-&lt;li>How long does this solution need to last?&lt;/li>
-&lt;li>Is it going to be perpetual?&lt;/li>
-&lt;li>How do we handle high availability and disaster recovery?&lt;/li>
-&lt;li>When will I know it&amp;rsquo;s complete?&lt;/li>
-&lt;/ul>
-&lt;p>That last point—&lt;em>when will I know it&amp;rsquo;s complete?&lt;/em>—can be ambiguous. Does it mean the solution is fully fleshed out and working at the desired end state? Or does it mean it&amp;rsquo;s ready once a Minimum Viable Product (MVP) has been constructed?&lt;/p>
-&lt;p>If the solution is too simple, it may lack features or fail to scale. But if it’s too complex—over-engineered—it might introduce unexpected bugs and hurt not just our credibility, but also the brand we represent, especially in a corporate context. And beyond the bugs, what about the cost of building that solution? Our time? Money? Resources? All potentially wasted on something that doesn’t deliver a meaningful return on investment.&lt;/p>
-&lt;p>It’s a conundrum, no doubt. But there are frameworks and considerations that help you draw the line and confidently mark a solution as done based on criteria.&lt;/p>
-&lt;h2 id="understanding-a-solution">Understanding a solution
-&lt;/h2>&lt;p>One of the first fundamental skills that you need to understand as a Consultant or anyone in a role that involves designing or architecting solutions—is the ability to understand the &lt;strong>what&lt;/strong> and the &lt;strong>why&lt;/strong>:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>What&lt;/strong> are we doing?&lt;/li>
-&lt;li>&lt;strong>What&lt;/strong> are we building?&lt;/li>
-&lt;li>&lt;strong>What&lt;/strong> is it?&lt;/li>
-&lt;li>&lt;strong>What&lt;/strong> will it be?&lt;/li>
-&lt;/ul>
-&lt;p>Once we understand that &lt;strong>what&lt;/strong>, we move on to the &lt;strong>why&lt;/strong>:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>Why&lt;/strong> are we doing this?&lt;/li>
-&lt;li>&lt;strong>Why&lt;/strong> are we building this?&lt;/li>
-&lt;li>&lt;strong>Why&lt;/strong> do we need to include x, y and z?&lt;/li>
-&lt;li>&lt;strong>Why&lt;/strong> is this or that a good idea?&lt;/li>
-&lt;/ul>
-&lt;p>All of those &lt;em>what&lt;/em> and &lt;em>why&lt;/em> questions can be summarised in a single word: requirements. Requirements are the driving force behind the rationale. They help shape what the solution will look like and give context to the decisions made along the way. They set the direction—establishing goals, coordinating efforts across teams, and managing expectations for stakeholders. From a commercial perspective, requirements are assessed and translated into elements such as &lt;strong>definition of done&lt;/strong> and/or &lt;strong>acceptance criteria&lt;/strong>. These elements are then used in commercial agreements like a &lt;strong>Statement of Work (SoW)&lt;/strong> to provide clear and concise deliverables for all parties involved.&lt;/p>
-&lt;p>When we understand the requirements of what we’re setting out to do, we have structure. That structure becomes the foundation for a plan—where ideas take shape and strategy begins to form. As you become more proficient in your craft—whether it’s software, infrastructure, or something else—you’ll begin to recognise patterns. You’ll recall what worked well and what didn’t in previous experiences. Armed with that insight, you’ll feel more confident when similar situations arise, and better equipped to act early—before issues have a chance to fester.&lt;/p>
-&lt;h2 id="the-definition-of-complete">The definition of complete
-&lt;/h2>&lt;p>Now comes the tricky part of this process: &lt;em>What defines a solution as complete?&lt;/em>&lt;/p>
-&lt;ul>
-&lt;li>Is it something that we can measure?&lt;/li>
-&lt;li>Does it relate to its run cost?&lt;/li>
-&lt;li>Can it handle the load we need it to?&lt;/li>
-&lt;li>Will it accumulate technical debt?&lt;/li>
-&lt;/ul>
-&lt;p>We do have frameworks and tools to help answer these questions. In the previous section on understanding a solution, we mentioned the &lt;strong>definition of done&lt;/strong> and &lt;strong>acceptance criteria&lt;/strong>. Depending on how mature the environment and organisation are, these could be loosely defined or meticulously detailed. By using these elements, we can clearly describe what a “complete” solution looks like—aligned with what we’re trying to achieve &lt;strong>now&lt;/strong>.&lt;/p>
-&lt;p>Even though we use the term “complete”, it doesn’t always mean the end state. More often, it marks a meaningful checkpoint. The future state will continue to evolve—just as the broader IT landscape constantly shifts.&lt;/p>
-&lt;p>A definition of done may reflect a &lt;strong>simple&lt;/strong>, even traditional, solution. Solutions don’t need to be extravagant if they fulfill the basic requirements. There’s nothing wrong with doing things the old-fashioned way. Take mainframes, for example. You might think of them as legacy tech from the 1960s—but would it surprise you to know that many major corporations across sectors like finance, government, and healthcare still rely on mainframes today to process transactions? Mainframes continue to hold relevance because of their unique capabilities and the critical roles they play in these industries. Could they be replaced by modern stacks like serverless architectures? Probably. Is it a simple task? Absolutely not.&lt;/p>
-&lt;p>The mainframe example highlights two key principles:&lt;/p>
-&lt;ol>
-&lt;li>&lt;strong>If it isn’t broken, don’t fix it&lt;/strong> — or in other words, if it works, don’t change it.&lt;/li>
-&lt;li>&lt;strong>Old technology doesn’t automatically mean obsolete&lt;/strong> — in fact, as older generations retire, we might even see a kind of renaissance for legacy technologies like mainframes.&lt;/li>
-&lt;/ol>
-&lt;p>At one point in history, mainframes were considered the north star of computing. Fast forward to today, and our modern-day north stars might be serverless platforms that run only your code—or perhaps AI-powered observability systems that proactively detect anomalies.&lt;/p>
-&lt;p>Technology doesn’t stand still. It evolves rapidly. Today, we’re seeing explosive growth in AI, particularly with agentic models that leverage Model Context Protocol (MCP) servers.&lt;/p>
-&lt;p>So when it comes to defining what makes a solution &amp;ldquo;complete,&amp;rdquo; remember these quick tidbits:&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>It’s fit for purpose.&lt;/strong> It doesn’t need to last forever—just for today, tomorrow, and the near future. Solutions will always evolve.&lt;/li>
-&lt;li>&lt;strong>It will scale within reason.&lt;/strong> If you’re expecting millions of requests per second, architect accordingly. But if you&amp;rsquo;re only handling a few per second, you don’t need a massive data platform with all the bells and whistles that might cost thousands per month to run.&lt;/li>
-&lt;li>&lt;strong>It will work.&lt;/strong> This is the core of it all. “Working” might mean different things to different people, but ultimately, the solution behaves as intended and delivers on its purpose.&lt;/li>
-&lt;/ul>
-&lt;h2 id="over-engineering-and-its-ramifications">Over-engineering and its ramifications
-&lt;/h2>&lt;p>So what happens when we go to the other extreme? Rather than stopping at our definition of done, we push way past it and engineer the hell out of a solution. It’s amazing! It’s something to behold!&lt;/p>
-&lt;p>…Or is it?&lt;/p>
-&lt;p>How far down the rabbit hole did you have to go to get there?
-And ultimately—what was the cost?&lt;/p>
-&lt;p>Over-engineering is contextual. When it does happen, it can manifest in different forms depending on the solution. One of the worst forms is trying to account for every possible future use case—a “just in case” mindset. Building a solution to handle everything that &lt;em>might&lt;/em> happen in the future can stifle progress. It can halt or delay the project until there is mutual resolution amongst stakeholders, all while delaying progress to the end goal. In situations like this, I often use the saying: &lt;strong>“the juice isn’t worth the squeeze.”&lt;/strong> In other words, to achieve &lt;em>X&lt;/em>, we need to do &lt;em>Y&lt;/em>—and &lt;em>Y&lt;/em> just isn’t worth the investment of our time, resources, or mental energy.&lt;/p>
-&lt;p>Another form of over-engineering is adding unnecessary complexity. The &lt;strong>maturity&lt;/strong> of a solution must be factored in when architecting. Introducing advanced complexity to a system that’s not ready for it can be wasteful, or even damaging. Take a startup, for example. Let’s say their core revenue-driving product is a piece of software. Right now, that software runs on a single PC under someone’s desk. Is it elegant? No. Does it work for &lt;em>now&lt;/em>? Actually, yes—in a very non-ideal way.&lt;/p>
-&lt;p>If that same startup tries to launch into a cutting-edge, serverless cloud architecture with auto-scaling, CI/CD pipelines, and bleeding-edge automation—&lt;strong>but has no current need for it&lt;/strong>—that effort would be a catastrophe. The resources required to build and support such a setup would likely never see a return, especially if the startup is still finding product-market fit or struggling with cash flow. In fact, they might run out of steam entirely and fold before realising their goals.&lt;/p>
-&lt;p>A solution shouldn’t be &lt;strong>too top-heavy&lt;/strong> at the start. By that, I mean: don’t add features or components that don’t bring actual value in the near term. Later—once things stabilize and there’s a clear path forward—it might make sense to revisit and layer in those “nice to have” features. But early on, they often just weigh you down.&lt;/p>
-&lt;h2 id="return-on-investment-roi-and-building-momentum">Return on Investment (ROI) and building momentum
-&lt;/h2>&lt;p>After we get through the rigorous process of vetting the solution using the mechanisms already mentioned, we need to shift into a mindset that focuses on &lt;strong>vision&lt;/strong>—the long-term outlook for the solution. As part of this vision, we must consider how we extract value over time and achieve a solid return on investment (ROI). But ROI isn’t always about money. There are other forms of currency we “spend” to make a solution functional and successful. These include:&lt;/p>
-&lt;ul>
-&lt;li>Time&lt;/li>
-&lt;li>Effort&lt;/li>
-&lt;li>On-going support&lt;/li>
-&lt;li>Business integration&lt;/li>
-&lt;/ul>
-&lt;p>Let’s start with &lt;strong>time&lt;/strong>. It’s one of our most precious resources—yet most of us (myself included) never seem to have enough of it. In the digital age, it’s easy to jump from watching Judge Judy on YouTube to checking sports results, reading the latest tariff news, playing a video game, or falling into a social media rabbit hole. There’s always something waiting to eat into our time.&lt;/p>
-&lt;p>So, when we invest time into a solution, it should give us time back. The return should come in the form of &lt;strong>efficiency&lt;/strong> or &lt;strong>automation&lt;/strong>. This is especially true when adopting DevOps methodologies, where the whole premise is to automate as much of your role as possible—freeing you up for higher-value tasks.&lt;/p>
-&lt;p>Another often-overlooked factor is the &lt;strong>longevity of the solution&lt;/strong> and what ongoing support and maintenance will look like. Simple systems might be seen as ancient by today’s standards—but they can also be the easiest to maintain, debug, and enhance. A “good enough” solution &lt;em>today&lt;/em> often beats a “perfect” one six months from now.&lt;/p>
-&lt;p>A solution that is well-vetted, tested, iterated upon, intuitive, and clearly defined delivers strong ROI—not just for development teams, but also for project managers, business stakeholders, and end users. When more people begin interacting with the solution, momentum builds. Feedback loops form, giving valuable insight into what to improve or prioritise next.&lt;/p>
-&lt;p>This is how momentum turns into progress.
-This is how “good enough” evolves into &lt;strong>great&lt;/strong>.&lt;/p>
-&lt;h2 id="conclusion">Conclusion
-&lt;/h2>&lt;p>The next time you&amp;rsquo;re designing a solution—or playing a role in shaping one—consider what’s &lt;strong>practical&lt;/strong> to get it working now, versus what’s &lt;strong>“perfect”&lt;/strong> but loaded with nice-to-have features that may not add much value.&lt;/p>
-&lt;p>Don’t get stuck in the weeds and chase those rabbits too deep into those holes! While it can be fun to experiment and theory-craft, a good engineer or architect knows when they&amp;rsquo;ve gone deep enough to achieve a solid result for a reasonable amount of effort.
-In the end, completing a solution up until a point isn’t settling. It&amp;rsquo;s being strategic.&lt;/p>
-&lt;p>&lt;em>Cover image by &lt;a class="link" href="https://unsplash.com/@lucasdixsept" target="_blank" rel="noopener"
->dix sept&lt;/a> on Unsplash&lt;/em>&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Solution Completeness on Patrick Contes blog</title><link>https://powershellpat.github.io/tags/solution-completeness/</link><description>Recent content in Solution Completeness on Patrick Contes blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 12 Jun 2025 22:20:32 +1000</lastBuildDate><atom:link href="https://powershellpat.github.io/tags/solution-completeness/index.xml" rel="self" type="application/rss+xml"/><item><title>Perfect vs Practical: How to know when an IT Solution is ready</title><link>https://powershellpat.github.io/p/perfect-vs-practical-how-to-know-when-an-it-solution-is-ready/</link><pubDate>Thu, 12 Jun 2025 22:20:32 +1000</pubDate><guid>https://powershellpat.github.io/p/perfect-vs-practical-how-to-know-when-an-it-solution-is-ready/</guid><description>&lt;img src="https://powershellpat.github.io/" alt="Featured image of post Perfect vs Practical: How to know when an IT Solution is ready" /&gt;&lt;h2 id="introduction"&gt;Introduction
+&lt;/h2&gt;&lt;p&gt;Designing IT solutions is a challenging task. Not only do you need to take several factors into consideration, but you also need to understand the lifecycle of what you’re designing. Questions will inevitably pop into your head, like:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;How long does this solution need to last?&lt;/li&gt;
+&lt;li&gt;Is it going to be perpetual?&lt;/li&gt;
+&lt;li&gt;How do we handle high availability and disaster recovery?&lt;/li&gt;
+&lt;li&gt;When will I know it&amp;rsquo;s complete?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;That last point—&lt;em&gt;when will I know it&amp;rsquo;s complete?&lt;/em&gt;—can be ambiguous. Does it mean the solution is fully fleshed out and working at the desired end state? Or does it mean it&amp;rsquo;s ready once a Minimum Viable Product (MVP) has been constructed?&lt;/p&gt;
+&lt;p&gt;If the solution is too simple, it may lack features or fail to scale. But if it’s too complex—over-engineered—it might introduce unexpected bugs and hurt not just our credibility, but also the brand we represent, especially in a corporate context. And beyond the bugs, what about the cost of building that solution? Our time? Money? Resources? All potentially wasted on something that doesn’t deliver a meaningful return on investment.&lt;/p&gt;
+&lt;p&gt;It’s a conundrum, no doubt. But there are frameworks and considerations that help you draw the line and confidently mark a solution as done based on criteria.&lt;/p&gt;
+&lt;h2 id="understanding-a-solution"&gt;Understanding a solution
+&lt;/h2&gt;&lt;p&gt;One of the first fundamental skills that you need to understand as a Consultant or anyone in a role that involves designing or architecting solutions—is the ability to understand the &lt;strong&gt;what&lt;/strong&gt; and the &lt;strong&gt;why&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;What&lt;/strong&gt; are we doing?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;What&lt;/strong&gt; are we building?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;What&lt;/strong&gt; is it?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;What&lt;/strong&gt; will it be?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Once we understand that &lt;strong&gt;what&lt;/strong&gt;, we move on to the &lt;strong&gt;why&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Why&lt;/strong&gt; are we doing this?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Why&lt;/strong&gt; are we building this?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Why&lt;/strong&gt; do we need to include x, y and z?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Why&lt;/strong&gt; is this or that a good idea?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;All of those &lt;em&gt;what&lt;/em&gt; and &lt;em&gt;why&lt;/em&gt; questions can be summarised in a single word: requirements. Requirements are the driving force behind the rationale. They help shape what the solution will look like and give context to the decisions made along the way. They set the direction—establishing goals, coordinating efforts across teams, and managing expectations for stakeholders. From a commercial perspective, requirements are assessed and translated into elements such as &lt;strong&gt;definition of done&lt;/strong&gt; and/or &lt;strong&gt;acceptance criteria&lt;/strong&gt;. These elements are then used in commercial agreements like a &lt;strong&gt;Statement of Work (SoW)&lt;/strong&gt; to provide clear and concise deliverables for all parties involved.&lt;/p&gt;
+&lt;p&gt;When we understand the requirements of what we’re setting out to do, we have structure. That structure becomes the foundation for a plan—where ideas take shape and strategy begins to form. As you become more proficient in your craft—whether it’s software, infrastructure, or something else—you’ll begin to recognise patterns. You’ll recall what worked well and what didn’t in previous experiences. Armed with that insight, you’ll feel more confident when similar situations arise, and better equipped to act early—before issues have a chance to fester.&lt;/p&gt;
+&lt;h2 id="the-definition-of-complete"&gt;The definition of complete
+&lt;/h2&gt;&lt;p&gt;Now comes the tricky part of this process: &lt;em&gt;What defines a solution as complete?&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Is it something that we can measure?&lt;/li&gt;
+&lt;li&gt;Does it relate to its run cost?&lt;/li&gt;
+&lt;li&gt;Can it handle the load we need it to?&lt;/li&gt;
+&lt;li&gt;Will it accumulate technical debt?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We do have frameworks and tools to help answer these questions. In the previous section on understanding a solution, we mentioned the &lt;strong&gt;definition of done&lt;/strong&gt; and &lt;strong&gt;acceptance criteria&lt;/strong&gt;. Depending on how mature the environment and organisation are, these could be loosely defined or meticulously detailed. By using these elements, we can clearly describe what a “complete” solution looks like—aligned with what we’re trying to achieve &lt;strong&gt;now&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Even though we use the term “complete”, it doesn’t always mean the end state. More often, it marks a meaningful checkpoint. The future state will continue to evolve—just as the broader IT landscape constantly shifts.&lt;/p&gt;
+&lt;p&gt;A definition of done may reflect a &lt;strong&gt;simple&lt;/strong&gt;, even traditional, solution. Solutions don’t need to be extravagant if they fulfill the basic requirements. There’s nothing wrong with doing things the old-fashioned way. Take mainframes, for example. You might think of them as legacy tech from the 1960s—but would it surprise you to know that many major corporations across sectors like finance, government, and healthcare still rely on mainframes today to process transactions? Mainframes continue to hold relevance because of their unique capabilities and the critical roles they play in these industries. Could they be replaced by modern stacks like serverless architectures? Probably. Is it a simple task? Absolutely not.&lt;/p&gt;
+&lt;p&gt;The mainframe example highlights two key principles:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;If it isn’t broken, don’t fix it&lt;/strong&gt; — or in other words, if it works, don’t change it.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Old technology doesn’t automatically mean obsolete&lt;/strong&gt; — in fact, as older generations retire, we might even see a kind of renaissance for legacy technologies like mainframes.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;At one point in history, mainframes were considered the north star of computing. Fast forward to today, and our modern-day north stars might be serverless platforms that run only your code—or perhaps AI-powered observability systems that proactively detect anomalies.&lt;/p&gt;
+&lt;p&gt;Technology doesn’t stand still. It evolves rapidly. Today, we’re seeing explosive growth in AI, particularly with agentic models that leverage Model Context Protocol (MCP) servers.&lt;/p&gt;
+&lt;p&gt;So when it comes to defining what makes a solution &amp;ldquo;complete,&amp;rdquo; remember these quick tidbits:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;It’s fit for purpose.&lt;/strong&gt; It doesn’t need to last forever—just for today, tomorrow, and the near future. Solutions will always evolve.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;It will scale within reason.&lt;/strong&gt; If you’re expecting millions of requests per second, architect accordingly. But if you&amp;rsquo;re only handling a few per second, you don’t need a massive data platform with all the bells and whistles that might cost thousands per month to run.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;It will work.&lt;/strong&gt; This is the core of it all. “Working” might mean different things to different people, but ultimately, the solution behaves as intended and delivers on its purpose.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="over-engineering-and-its-ramifications"&gt;Over-engineering and its ramifications
+&lt;/h2&gt;&lt;p&gt;So what happens when we go to the other extreme? Rather than stopping at our definition of done, we push way past it and engineer the hell out of a solution. It’s amazing! It’s something to behold!&lt;/p&gt;
+&lt;p&gt;…Or is it?&lt;/p&gt;
+&lt;p&gt;How far down the rabbit hole did you have to go to get there?
+And ultimately—what was the cost?&lt;/p&gt;
+&lt;p&gt;Over-engineering is contextual. When it does happen, it can manifest in different forms depending on the solution. One of the worst forms is trying to account for every possible future use case—a “just in case” mindset. Building a solution to handle everything that &lt;em&gt;might&lt;/em&gt; happen in the future can stifle progress. It can halt or delay the project until there is mutual resolution amongst stakeholders, all while delaying progress to the end goal. In situations like this, I often use the saying: &lt;strong&gt;“the juice isn’t worth the squeeze.”&lt;/strong&gt; In other words, to achieve &lt;em&gt;X&lt;/em&gt;, we need to do &lt;em&gt;Y&lt;/em&gt;—and &lt;em&gt;Y&lt;/em&gt; just isn’t worth the investment of our time, resources, or mental energy.&lt;/p&gt;
+&lt;p&gt;Another form of over-engineering is adding unnecessary complexity. The &lt;strong&gt;maturity&lt;/strong&gt; of a solution must be factored in when architecting. Introducing advanced complexity to a system that’s not ready for it can be wasteful, or even damaging. Take a startup, for example. Let’s say their core revenue-driving product is a piece of software. Right now, that software runs on a single PC under someone’s desk. Is it elegant? No. Does it work for &lt;em&gt;now&lt;/em&gt;? Actually, yes—in a very non-ideal way.&lt;/p&gt;
+&lt;p&gt;If that same startup tries to launch into a cutting-edge, serverless cloud architecture with auto-scaling, CI/CD pipelines, and bleeding-edge automation—&lt;strong&gt;but has no current need for it&lt;/strong&gt;—that effort would be a catastrophe. The resources required to build and support such a setup would likely never see a return, especially if the startup is still finding product-market fit or struggling with cash flow. In fact, they might run out of steam entirely and fold before realising their goals.&lt;/p&gt;
+&lt;p&gt;A solution shouldn’t be &lt;strong&gt;too top-heavy&lt;/strong&gt; at the start. By that, I mean: don’t add features or components that don’t bring actual value in the near term. Later—once things stabilize and there’s a clear path forward—it might make sense to revisit and layer in those “nice to have” features. But early on, they often just weigh you down.&lt;/p&gt;
+&lt;h2 id="return-on-investment-roi-and-building-momentum"&gt;Return on Investment (ROI) and building momentum
+&lt;/h2&gt;&lt;p&gt;After we get through the rigorous process of vetting the solution using the mechanisms already mentioned, we need to shift into a mindset that focuses on &lt;strong&gt;vision&lt;/strong&gt;—the long-term outlook for the solution. As part of this vision, we must consider how we extract value over time and achieve a solid return on investment (ROI). But ROI isn’t always about money. There are other forms of currency we “spend” to make a solution functional and successful. These include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Time&lt;/li&gt;
+&lt;li&gt;Effort&lt;/li&gt;
+&lt;li&gt;On-going support&lt;/li&gt;
+&lt;li&gt;Business integration&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Let’s start with &lt;strong&gt;time&lt;/strong&gt;. It’s one of our most precious resources—yet most of us (myself included) never seem to have enough of it. In the digital age, it’s easy to jump from watching Judge Judy on YouTube to checking sports results, reading the latest tariff news, playing a video game, or falling into a social media rabbit hole. There’s always something waiting to eat into our time.&lt;/p&gt;
+&lt;p&gt;So, when we invest time into a solution, it should give us time back. The return should come in the form of &lt;strong&gt;efficiency&lt;/strong&gt; or &lt;strong&gt;automation&lt;/strong&gt;. This is especially true when adopting DevOps methodologies, where the whole premise is to automate as much of your role as possible—freeing you up for higher-value tasks.&lt;/p&gt;
+&lt;p&gt;Another often-overlooked factor is the &lt;strong&gt;longevity of the solution&lt;/strong&gt; and what ongoing support and maintenance will look like. Simple systems might be seen as ancient by today’s standards—but they can also be the easiest to maintain, debug, and enhance. A “good enough” solution &lt;em&gt;today&lt;/em&gt; often beats a “perfect” one six months from now.&lt;/p&gt;
+&lt;p&gt;A solution that is well-vetted, tested, iterated upon, intuitive, and clearly defined delivers strong ROI—not just for development teams, but also for project managers, business stakeholders, and end users. When more people begin interacting with the solution, momentum builds. Feedback loops form, giving valuable insight into what to improve or prioritise next.&lt;/p&gt;
+&lt;p&gt;This is how momentum turns into progress.
+This is how “good enough” evolves into &lt;strong&gt;great&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;The next time you&amp;rsquo;re designing a solution—or playing a role in shaping one—consider what’s &lt;strong&gt;practical&lt;/strong&gt; to get it working now, versus what’s &lt;strong&gt;“perfect”&lt;/strong&gt; but loaded with nice-to-have features that may not add much value.&lt;/p&gt;
+&lt;p&gt;Don’t get stuck in the weeds and chase those rabbits too deep into those holes! While it can be fun to experiment and theory-craft, a good engineer or architect knows when they&amp;rsquo;ve gone deep enough to achieve a solid result for a reasonable amount of effort.
+In the end, completing a solution up until a point isn’t settling. It&amp;rsquo;s being strategic.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Cover image by &lt;a class="link" href="https://unsplash.com/@lucasdixsept" target="_blank" rel="noopener"
+&gt;dix sept&lt;/a&gt; on Unsplash&lt;/em&gt;&lt;/p&gt;</description></item></channel></rss>
