@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>AWS on Patrick Contes blog</title><link>https://powershellpat.github.io/categories/aws/</link><description>Recent content in AWS on Patrick Contes blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 08 Jul 2025 22:00:32 +1000</lastBuildDate><atom:link href="https://powershellpat.github.io/categories/aws/index.xml" rel="self" type="application/rss+xml"/><item><title>Designing Egress in AWS</title><link>https://powershellpat.github.io/p/designing-egress-in-aws/</link><pubDate>Tue, 08 Jul 2025 22:00:32 +1000</pubDate><guid>https://powershellpat.github.io/p/designing-egress-in-aws/</guid><description>&lt;img src="https://powershellpat.github.io/" alt="Featured image of post Designing Egress in AWS" /&gt;&lt;h2 id="introduction"&gt;Introduction
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>AWS on Patrick Contes blog</title><link>https://patconte.github.io/categories/aws/</link><description>Recent content in AWS on Patrick Contes blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 08 Jul 2025 22:00:32 +1000</lastBuildDate><atom:link href="https://patconte.github.io/categories/aws/index.xml" rel="self" type="application/rss+xml"/><item><title>Designing Egress in AWS</title><link>https://patconte.github.io/p/designing-egress-in-aws/</link><pubDate>Tue, 08 Jul 2025 22:00:32 +1000</pubDate><guid>https://patconte.github.io/p/designing-egress-in-aws/</guid><description>&lt;img src="https://patconte.github.io/" alt="Featured image of post Designing Egress in AWS" /&gt;&lt;h2 id="introduction"&gt;Introduction
 &lt;/h2&gt;&lt;p&gt;AWS networking is fairly straightforward in a small setup. As a singular environment, you will generally have a single VPC that consists of:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Subnets&lt;/li&gt;
@@ -33,10 +33,10 @@
 &lt;p&gt;Each VPC will be associated with a single Transit Gateway (TGW) route table and propagate its routes accordingly. A default route will be configured to point to the egress VPC, enabling a centralised egress pattern.&lt;/p&gt;
 &lt;p&gt;Each VPC will be created in a separate AWS account, except for the egress VPC, which (along with the TGW) will reside in a dedicated networking account. The TGW will be shared via AWS Resource Access Manager (RAM) to each respective AWS account, allowing TGW attachments to be created for each VPC.&lt;/p&gt;
 &lt;p&gt;This is what the architecture looks like:
-&lt;img src="https://powershellpat.github.io/p/designing-egress-in-aws/centralised.png"
+&lt;img src="https://patconte.github.io/p/designing-egress-in-aws/centralised.png"
 width="697"
 height="1125"
-srcset="https://powershellpat.github.io/p/designing-egress-in-aws/centralised_hu_2c2bb8791c1f4371.png 480w, https://powershellpat.github.io/p/designing-egress-in-aws/centralised_hu_9ae02f94909ab1b1.png 1024w"
+srcset="https://patconte.github.io/p/designing-egress-in-aws/centralised_hu_2c2bb8791c1f4371.png 480w, https://patconte.github.io/p/designing-egress-in-aws/centralised_hu_9ae02f94909ab1b1.png 1024w"
 loading="lazy"
 alt="Centralised solution"
 class="gallery-image"
@@ -57,10 +57,10 @@ data-flex-basis="148px"
 &lt;p&gt;Each VPC will be associated with a single TGW route table and will propagate its routes accordingly. This route table will &lt;strong&gt;not&lt;/strong&gt; contain a default route, as traffic will exit locally via each VPCs NAT Gateways before reaching the TGW.&lt;/p&gt;
 &lt;p&gt;Each VPC will be created in separate AWS accounts. The TGW will again be created in the networking account and RAM shared to each AWS account to allow for TGW attachments per VPC.&lt;/p&gt;
 &lt;p&gt;This is what the architecture looks like:
-&lt;img src="https://powershellpat.github.io/p/designing-egress-in-aws/decentralised.png"
+&lt;img src="https://patconte.github.io/p/designing-egress-in-aws/decentralised.png"
 width="701"
 height="1035"
-srcset="https://powershellpat.github.io/p/designing-egress-in-aws/decentralised_hu_90043dbfbe233508.png 480w, https://powershellpat.github.io/p/designing-egress-in-aws/decentralised_hu_4087db33164ab5e6.png 1024w"
+srcset="https://patconte.github.io/p/designing-egress-in-aws/decentralised_hu_90043dbfbe233508.png 480w, https://patconte.github.io/p/designing-egress-in-aws/decentralised_hu_4087db33164ab5e6.png 1024w"
 loading="lazy"
 alt="Decentralised solution"
 class="gallery-image"
