@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Salaries on Patrick Contes blog</title><link>https://patconte.github.io/tags/salaries/</link><description>Recent content in Salaries on Patrick Contes blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 27 Sep 2026 22:44:00 +1000</lastBuildDate><atom:link href="https://patconte.github.io/tags/salaries/index.xml" rel="self" type="application/rss+xml"/><item><title>The "Everything" engineer: Why industry expectations are getting out of hand</title><link>https://patconte.github.io/p/the-everything-engineer-why-industry-expectations-are-getting-out-of-hand/</link><pubDate>Sun, 27 Sep 2026 22:44:00 +1000</pubDate><guid>https://patconte.github.io/p/the-everything-engineer-why-industry-expectations-are-getting-out-of-hand/</guid><description>&lt;img src="https://patconte.github.io/" alt="Featured image of post The "Everything" engineer: Why industry expectations are getting out of hand" /&gt;&lt;p&gt;I&amp;rsquo;m a frequent user of Reddit. I find it fascinating some of the stories that I read, from AusCorp, where someone is complaining about having to do a white collar role for the next 40 years and being miserable. To a post on GardeningAustralia, asking if yukkas are a good idea to keep long term. Everyone has something to ask, something to share, and something to ponder.&lt;/p&gt;
+&lt;p&gt;Recently, I came across a post in the AustraliaIT sub-reddit with this picture:&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://patconte.github.io/p/the-everything-engineer-why-industry-expectations-are-getting-out-of-hand/full-stack-ai-engineer-posting.png"
+width="891"
+height="716"
+srcset="https://patconte.github.io/p/the-everything-engineer-why-industry-expectations-are-getting-out-of-hand/full-stack-ai-engineer-posting_hu_4e1ad95c0d3a8a47.png 480w, https://patconte.github.io/p/the-everything-engineer-why-industry-expectations-are-getting-out-of-hand/full-stack-ai-engineer-posting_hu_8b5424bd62d689d4.png 1024w"
+loading="lazy"
+alt="Full Stack AI Engineer job posting"
+class="gallery-image"
+data-flex-grow="124"
+data-flex-basis="298px"
+&gt;&lt;/p&gt;
+&lt;p&gt;At first, I&amp;rsquo;m thinking to myself (like most things I now see on the internet) &amp;ldquo;surely this can&amp;rsquo;t be legit. Surely someone has fabricated this to be ragebait to get a rise out of others&amp;rdquo;. I was wrong. It really is a job that was posted on a jobs board website. Now, before I get angry people saying that job postings are not vetted by any entity (aside from if they are illegal or use inappropriate wording), I get that some agencies will try and use jobs boards to harvest personal information to build profiles. I&amp;rsquo;ve heard of it happening. It&amp;rsquo;s rather appalling behaviour, especially with how often we now hear about websites getting hacked and our personal information gets stolen. I suppose when we think of IT, we need to remember what the I stands for. At the end of the day, it&amp;rsquo;s all information. But it is just so vast now, that it encompasses many elements of our lives.&lt;/p&gt;
+&lt;p&gt;Job postings of this nature are amusing at best, and highly detrimental at worst. They set a precedence for the future and attempt to capture incredibly unrealistic expectations for both employers and employees. This kind of thing really needs to stop lest we have people in roles that will drive them to an early grave.&lt;/p&gt;
+&lt;h2 id="actual-jobscareers-in-this-posting"&gt;Actual jobs/careers in this posting
+&lt;/h2&gt;&lt;p&gt;Let&amp;rsquo;s start with what some may perceive as obvious, where others may legitimately be confused: the number of roles here. This is a rough breakdown of what I came up with:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;AI/ML engineer:&lt;/strong&gt; Very hot at the moment, given the nature of Generative AI.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Full stack engineer:&lt;/strong&gt; This could even further be split between the actual key skills of frontend and backend. However, full stack roles are a thing which is seen as the end game of the software engineering pathway.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Data engineer/scientist:&lt;/strong&gt; Working with all things data is in and of itself absolutely a profession.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cloud/DevOps engineer:&lt;/strong&gt; These are now quite interchangeable. You normally will not find a cloud engineer who doesn&amp;rsquo;t know or do DevOps. ClickOps is not the way anymore.
+&lt;ul&gt;
+&lt;li&gt;At a stretch, you MAY be able to include a MLOps engineer&amp;rsquo;s capabilities into this role. To be fair, I haven&amp;rsquo;t included this as a separate role as it is technically possible to do all 3 but you need to be damn good.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Database engineer:&lt;/strong&gt; A database engineer (or a DBA as we normally refer to them) has to be able to handle the actual database engines. This is not the same as a data engineer/scientist, although there is some overlap.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Architecture:&lt;/strong&gt; Architects come in multiple forms, but for the sake of argument, we will simply say this is a role in itself.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;At the very least, we have 6 roles here. Not to mention, if you had a single person doing this role, with all of the criteria mentioned, anything short of $500k/year would be underselling the capability that this person would have. Take my career as an example. I&amp;rsquo;m currently as of September 2026 a Senior Cloud Engineer. My background is on-premise infrastructure which eventually branched into cloud and DevOps. I have 15 years of experience, and still there are many elements of my role that could be tuned. Not only could they be tuned, there are technologies that are within my wheelhouse that could be tuned. A large one of this is container orchestration, which is basically Kubernetes.&lt;/p&gt;
+&lt;p&gt;It begs the question of why even bother? Why try to do something like this, risk reputational damage and look for something that is just not possible? The person doing this role would have to be on par with Sheldon Cooper in terms of intelligence. And let me tell you, they are probably already working at a tier 1 company creating the next generation of technologies.&lt;/p&gt;
+&lt;h2 id="false-precedence-and-unrealistic-expectations"&gt;False precedence and unrealistic expectations
+&lt;/h2&gt;&lt;p&gt;As I covered before, most people in the tech/IT industry will take one look at this job and chuckle at how ridiculous it is. 6 roles (at least, there could even be more) in 1? You&amp;rsquo;ve got to be joking. Clearly this isn&amp;rsquo;t possible. Yet somehow, someone was convinced this was a good idea? That or they didn&amp;rsquo;t really care about the job and were really farming for leads from potential engineers where even 20% of the criteria were met.&lt;/p&gt;
+&lt;p&gt;The problem isn&amp;rsquo;t folks who have been in IT long enough. The problem is young talent wanting to explore a career in IT. I could write another entire blog on why it&amp;rsquo;s so challenging to break into the market now. When you have a young person who is at the crossroads of what to do after school, and looks at something like this job, they would treat this as a normalised role that is the future. Nothing could be further from the truth. However, because they are so impressionable at this age and want to make it, they will try to aim for most of the criteria that are specified. Imagine applying for a role at a supermarket. The criteria for the role are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Stack shelves&lt;/li&gt;
+&lt;li&gt;Serve customers at the checkout&lt;/li&gt;
+&lt;li&gt;Receive goods&lt;/li&gt;
+&lt;li&gt;Manage the deli&lt;/li&gt;
+&lt;li&gt;Serve as store manager&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Sounds moronic, right? This is honestly no different. It&amp;rsquo;s trying to cram several roles into one, and it just doesn&amp;rsquo;t happen.&lt;/p&gt;
+&lt;h2 id="ai-engineer--everything-engineer"&gt;AI engineer != everything engineer
+&lt;/h2&gt;&lt;p&gt;We have to pause and ask ourselves how this is possible and why this is happening. The answer is a rather convoluted one. IT in the modern era started out in the 1990s when the first websites started to come online. They were run on first generation NeXT Computers, which was hardware produced by a company founded by Steve Jobs in 1985. Ever since these early days, we have not stopped growing and evolving our technology landscape. Whenever products became functional, they were utilised to their full effect. In an iterative fashion, hardware and software underwent constant evolution. In the infrastructure space we saw many pioneering moments. These moments led to entirely new generations of how we approach IT as a whole. Here are some key moments in the infrastructure space:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;1993:&lt;/strong&gt; Windows NT 3.1 is released with domain management
+&lt;ul&gt;
+&lt;li&gt;Novell Netware did it first, but Microsoft were able to market better and eventually squeezed them out&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2000:&lt;/strong&gt; Windows Server 2000 introduces Active Directory&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2001:&lt;/strong&gt; VMware releases ESX server: the first bare-metal hypervisor&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2006:&lt;/strong&gt; Amazon launches S3 and EC2: the start of the entire hyperscaler era&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2013:&lt;/strong&gt; Docker is opensourced, allowing for Docker 1.0 to be released in 2014&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2014:&lt;/strong&gt; Google announces Kubernetes. In 2015, Kubernetes 1.0 ships and is donated to the CNCF&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2020:&lt;/strong&gt; GPT3 is released: the first LLM that is a genuine step-up&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2022:&lt;/strong&gt; ChatGPT is launched and is mass adopted&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Throughout this time, engineers who have been around for at least 12+ years have had a sampling of many of these technologies. As a result, they have been &amp;ldquo;conditioned&amp;rdquo; to be adaptable to the rapid evolution of the IT industry. Despite some of this technology now being over 20 years old (I&amp;rsquo;m looking at you, Active Directory), it is still prevalent. Not only is it prevalent, it&amp;rsquo;s still critical infrastructure. As a result, newer roles could not simply discard these legacy technologies because they aren&amp;rsquo;t legacy at all! Nowadays, especially in the platform engineering space, you need to have an understanding of at least 70% of the technologies mentioned. If you don&amp;rsquo;t, gaps can be bridged by doing research. However, you need to have a strong fundamental understanding of your craft. I still, to this day, use my Windows Server knowledge that I first started to obtain in 2013.&lt;/p&gt;
+&lt;p&gt;Where does this lead us? It leads to what I call melting pot roles. These are your catch-all roles, that basically have evolved with the industry and accumulated knowledge. Platform engineering is a great example, where you need to understand not only the tech stacks mentioned, but concepts to support them. AI engineering, even though it has its own set of tools, is now shifting into what platform engineering is, with yet another iteration of tools that engineers are expected to know and understand. While technically it&amp;rsquo;s possible, finding these engineers (with a reasonable ask for the criteria, not everything under the sun) is difficult. Commonly they are referred to as unicorns. As someone who is in this space, it feels normal to me because that&amp;rsquo;s just how my career has panned out. For others, especially those coming in within let&amp;rsquo;s say the last 7 years it probably feels a lot different.&lt;/p&gt;
+&lt;h2 id="salary-squeeze-given-financial-circumstances"&gt;Salary squeeze given financial circumstances
+&lt;/h2&gt;&lt;p&gt;Within Australia, like with many other countries, there is uncertainty. The uncertainty stems from many factors. This is compounding into issues where being made redundant from tech jobs is not uncommon. It&amp;rsquo;s becoming more common, as roles are either off-shored or are replaced* by AI. As a result, there is more talent on the market that is desperate for a job. Companies and recruiters are capitalising on this by offering lower salaries and day rates. It&amp;rsquo;s classic supply and demand, so before you get upset that companies are devious, we live in a capitalist society. I agree that there is too much power now in the major financial institutions, and it feels incredibly tone deaf when they gloat about multi-billion dollar profits when many of us are literally struggling to live. However, this is the nature of things. As they are.&lt;/p&gt;
+&lt;p&gt;For the job itself that I&amp;rsquo;m writing about, $120k sounds laughable. How the hell can that be justifiable? Well, tell someone that they no longer have a job, force them to look for roles for weeks or even months, and you start to see how downward pressure is being put on salaries. Still, I will maintain that $120k for this role is indeed laughable, but as has been made very apparent, this &amp;ldquo;Full Stack AI Engineer&amp;rdquo; job shouldn&amp;rsquo;t even exist.&lt;/p&gt;
+&lt;blockquote class="alert alert-note"&gt;
+&lt;p class="alert-heading"&gt;
+ℹ️
+Disclaimer
+&lt;/p&gt;
+&lt;p&gt;*I don&amp;rsquo;t feel like AI is replacing as many roles as the media would have you believe. I think it&amp;rsquo;s a combination of many things, in the guise of saying it was AI taking the jobs. If you work with AI tools often, you&amp;rsquo;ll know what I mean. Are roles however changing the AI era? Absolutely they are.&lt;/p&gt;
+&lt;/blockquote&gt;&lt;h2 id="a-realistic-ai-engineers-skillset"&gt;A realistic AI engineer&amp;rsquo;s skillset
+&lt;/h2&gt;&lt;p&gt;I&amp;rsquo;m still yet to delve super deep into the world of AI. It is an exceptionally fascinating topic, and when time permits I will continue to up-skill on it. This is an important context, as I can&amp;rsquo;t speak from experience (yet) of what an AI engineer really needs to have skills in.&lt;/p&gt;
+&lt;p&gt;If we think about it, AI roles should have some kind of Machine Learning (ML) background. Model training is not as important from the ground up, given that the large frontier companies (OpenAI/Anthropic/Google) have done the heavy lifting for us. Still, tools and understanding from that discipline do help when it comes to harnessing the abilities of Generative AI. I use the term Generative AI, as AI is an entire field and has multiple AI types. Generative AI is specifically what we are using now in various frameworks such as Agentic AI.&lt;/p&gt;
+&lt;p&gt;It&amp;rsquo;s also important to have some skills from other areas, including both infrastructure and software engineering. Looking at a few jobs on a jobs board, important skills to have are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Agentic harnesses (Claude Code, Codex etc)&lt;/li&gt;
+&lt;li&gt;Observability&lt;/li&gt;
+&lt;li&gt;Scripting&lt;/li&gt;
+&lt;li&gt;Cloud technologies&lt;/li&gt;
+&lt;li&gt;Agentic AI (LangGraph is one I see often, along with Strands Agents)&lt;/li&gt;
+&lt;li&gt;RAG (LangChain)&lt;/li&gt;
+&lt;li&gt;MCP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This is what a real AI engineer will need to know to be able to be successful. Of course, this list isn&amp;rsquo;t exhaustive and will be situational depending on many factors.&lt;/p&gt;
+&lt;p&gt;If you happen to see a job with this criteria mentioned, rest assured the red flags should not be raised!&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Cover image by &lt;a class="link" href="https://deepai.org/machine-learning-model/text2img" target="_blank" rel="noopener"
+&gt;deepai.org&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;</description></item></channel></rss>
