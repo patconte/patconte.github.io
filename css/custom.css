@@ -1,0 +1,93 @@
+/* GitHub-style alert blockquotes: > [!NOTE] / [!TIP] / [!IMPORTANT] / [!WARNING] / [!CAUTION] */
+.alert {
+    border-inline-start: 4px solid;
+    padding: 0.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .alert-heading {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+        font-weight: 700;
+        text-transform: capitalize;
+    }
+
+    > :last-child {
+        margin-bottom: 0;
+    }
+}
+
+.alert-note {
+    border-inline-start-color: #4493f8;
+
+    .alert-heading {
+        color: #4493f8;
+    }
+}
+
+.alert-tip {
+    border-inline-start-color: #3fb950;
+
+    .alert-heading {
+        color: #3fb950;
+    }
+}
+
+.alert-important {
+    border-inline-start-color: #ab7df8;
+
+    .alert-heading {
+        color: #ab7df8;
+    }
+}
+
+.alert-warning {
+    border-inline-start-color: #d29922;
+
+    .alert-heading {
+        color: #d29922;
+    }
+}
+
+.alert-caution {
+    border-inline-start-color: #f85149;
+
+    .alert-heading {
+        color: #f85149;
+    }
+}
+
+/*
+*   Tighter built-in table of contents
+*/
+.post_toc {
+    margin: 1rem 0;
+
+    h2 {
+        font-size: 125%;
+        margin: 0;
+        padding: 0 0 0.25rem;
+    }
+
+    #TableOfContents ol,
+    #TableOfContents ul {
+        margin: 0;
+        padding-left: 1.25rem;
+    }
+
+    #TableOfContents li {
+        margin: 0;
+        padding: 0.1rem 0;
+    }
+}
+
+/*
+*   Bold headings site-wide (Clarity defaults to light weights)
+*/
+h1, h2, h3, h4, h5, h6,
+.post_toc h2 {
+    font-weight: 700;
+}
